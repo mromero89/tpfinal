@@ -32,14 +32,7 @@ public class VerOrdenesCreadas extends JFrame {
 	
 	JTable tabla;
 	
-	private JComboBox inicio, destino;
 	
-	static ArrayList<ItemPedido> items = new ArrayList<ItemPedido>();
-	
-	public static void recibirItem(ItemPedido i) {
-		items.add(i);
-		System.out.println("Item agregado: "+i.getInsumo());
-	}
 	
 	VerOrdenesCreadas() throws SQLException{
 		
@@ -90,41 +83,11 @@ while(it.hasNext()){
 
 		this.setVisible(true);
 		//this.setLayout();
-		items = new ArrayList<ItemPedido>();
-		
-		//CargarCombos
-		ArrayList<Planta> todas;
-		
-		try {
-			todas = dao.AMBPlanta.todos();
-			int tamano = todas.size();
-			String[] nombrePlantas = new String[tamano];
-			int j=0;
-			for (Planta i : todas) {
-				nombrePlantas[j] = i.getNombre();
-				j++;
-				
-				
-
-			}
-			inicio = new JComboBox(nombrePlantas);
-			destino = new JComboBox(nombrePlantas);
-			
-		} catch (SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 		
 		
 	
 		
 		
-		JLabel fechamaxima = new JLabel("Fecha maxima");
-		
-		JTextField campofechamaxima = new JTextField(10);
-		
-		JLabel numeropedido = new JLabel("Numero de pedido");
-		JTextField camponumeropedido = new JTextField(10);
 		
 		
 		
@@ -138,8 +101,8 @@ while(it.hasNext()){
 		this.setContentPane(principal);
 	
 		
+		this.consultar();
 		
-		JButton guardar = new JButton("Guardar orden de pedido");
 		JButton agregar = new JButton("Detalle de items");
 		
 		agregar.addActionListener(e->{
@@ -148,20 +111,15 @@ while(it.hasNext()){
 		
 		
 		
-		guardar.addActionListener(e -> {
-			
-		this.consultar();
-		});
 	
 		
-		principal.add(destino);
+		//principal.add(destino);
 		
-		principal.add(fechamaxima);
-		principal.add(campofechamaxima);
-		principal.add(numeropedido);
-		principal.add(camponumeropedido);
+		//principal.add(fechamaxima);
+		//principal.add(campofechamaxima);
+		//principal.add(numeropedido);
+		//principal.add(camponumeropedido);
 		principal.add(agregar);
-		principal.add(guardar);
 		
 	
 		
