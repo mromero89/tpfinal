@@ -38,6 +38,7 @@ public class BusquedaCamion extends JFrame {
 	JButton limpiar = new JButton("Limpiar");
 	JButton consulta = new JButton("Consulta");
 	JButton borrar = new JButton("Borrar");
+	JButton modificar = new JButton("Modificar seleccionado");
 	
 	JPanel principal = new JPanel();
 	
@@ -61,7 +62,15 @@ public class BusquedaCamion extends JFrame {
 		this.setContentPane(principal);
 	
 		
-		
+		modificar.addActionListener(e->{
+			//ejemplo de obtencion de datos de una tabla
+			if (tabla.getSelectedRow() != -1) {
+				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+				ModificacionCamionSM smenu = new ModificacionCamionSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+			}
+			
+			
+		});
 		
 		
 		
@@ -94,8 +103,9 @@ public class BusquedaCamion extends JFrame {
 			JTable tablaresu = new JTable(aux, titulos);
 			principal.add(tablaresu);
 			principal.revalidate();*/
-			
+			principal.add(modificar);
 			consultar();
+			principal.revalidate();
 			
 		});
 		
@@ -106,13 +116,6 @@ public class BusquedaCamion extends JFrame {
 			campocostokm.setText("");
 			campocostoh.setText("");
 			campofechacompra.setText("");
-			
-			//ejemplo de obtencion de datos de una tabla
-			if (tabla.getSelectedRow() != -1) {
-				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-				ModificacionCamionSM smenu = new ModificacionCamionSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-			}
-			
 			
 		});
 		

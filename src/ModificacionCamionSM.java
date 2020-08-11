@@ -31,7 +31,7 @@ public class ModificacionCamionSM extends JFrame{
 	
 	
 	
-	JButton limpiar = new JButton("Limpiar");
+	
 	JButton modificar = new JButton("Modificar");
 	
 	JPanel principal = new JPanel();
@@ -69,37 +69,7 @@ public class ModificacionCamionSM extends JFrame{
 		
 		
 		
-		modificar.addActionListener(e->{/*
-			ArrayList<Camion> lista = new ArrayList<Camion>();
-			try {
-				lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			int tamano = lista.size();
-			String [][]aux = new String [tamano][6];
-			int i = 0; int j = 0;
-			for (Camion c : lista) {
-				aux[i][0]=c.getPatente();
-				aux[i][1]=c.getModelo();
-				aux[i][2]=String.valueOf(c.getKmrec());
-				aux[i][3]=String.valueOf(c.getCostokm());
-				aux[i][4]=String.valueOf(c.getCostoh());
-				aux[i][5]=c.getFechacompra();
-				i++;
-				
-				//areatext.append(i.getPatente()+"\n");
-			}
-			
-			String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
-			
-			
-			JTable tablaresu = new JTable(aux, titulos);
-			principal.add(tablaresu);
-			principal.revalidate();*/
-			
-			//consultar();
+		modificar.addActionListener(e->{
 			try {
 				dao.AMBCamion.modificarcamion(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText(), clave);
 			} catch (SQLException e1) {
@@ -109,45 +79,8 @@ public class ModificacionCamionSM extends JFrame{
 			
 		});
 		
-		limpiar.addActionListener(a -> {
-			campopatente.setText("");
-			campomodelo.setText("");
-			campokm.setText("");
-			campocostokm.setText("");
-			campocostoh.setText("");
-			campofechacompra.setText("");
-			
-			//ejemplo de obtencion de datos de una tabla
-			if (tabla.getSelectedRow() != -1) {
-				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-			}
-			
-			
-		});
 		
-		
-		/*Gestion de base de datos
-		try { 
-		    Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-		}
-		
-	
-		Connection connection = null;
-		// Database connect
-		// Conectamos con la base de datos
-		connection = DriverManager.getConnection(
-		        "jdbc:postgresql://localhost:5432/postgres",
-		        "postgres", "wilson222");
-		Statement stn = connection.createStatement();
-		stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-		
-		stn.close();
-		connection.close();
-	
-	FIn de gestion de base de datos
-	*/
+
 		
 		principal.add(patente);
 		principal.add(campopatente);
@@ -161,10 +94,8 @@ public class ModificacionCamionSM extends JFrame{
 		principal.add(campocostoh);
 		principal.add(fechacompra);
 		principal.add(campofechacompra);
-		principal.add(limpiar);
 		principal.add(areatext);
 		principal.add(modificar);
-		//principal.add(tabla);
 		
 		
 		

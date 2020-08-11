@@ -1,15 +1,26 @@
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import dao.ABMRuta;
+import dao.AMBPlanta;
+import dominio.Planta;
+import dominio.Ruta;
+
 public class ScreenPrincipal extends JFrame {
 	
-	ScreenPrincipal(){
+	ScreenPrincipal() {
 		super("Sistema de gestion de plantas");
 		this.setVisible(true);
-		
+
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -21,13 +32,9 @@ public class ScreenPrincipal extends JFrame {
 		//Menu Camiones
 		JMenu camiones = new JMenu("Camiones");
 		JMenuItem acamion = new JMenuItem("Alta");
-		JMenuItem bcamion = new JMenuItem("Baja");
-		JMenuItem mcamion = new JMenuItem("Modificacion");
-		JMenuItem busquedacamion = new JMenuItem("Busqueda de Camion");
+		JMenuItem busquedacamion = new JMenuItem("Busqueda/Modificacion/Eliminacion de Camion");
 		
 		camiones.add(acamion);
-		camiones.add(bcamion);
-		camiones.add(mcamion);
 		camiones.add(busquedacamion);
 		
 		//Menu Plantas
@@ -75,8 +82,11 @@ public class ScreenPrincipal extends JFrame {
 		//Menu ordenes de pedido
 		JMenu ordenes = new JMenu("Ordenes de pedido");
 		JMenuItem aorden = new JMenuItem("Alta");
+		JMenuItem creadas = new JMenuItem("Ver ordenes CREADAS");
+		
 		
 		ordenes.add(aorden);
+		ordenes.add(creadas);
 		
 		barramenu.add(camiones);
 		barramenu.add(plantas);
@@ -91,6 +101,15 @@ public class ScreenPrincipal extends JFrame {
 		this.setJMenuBar(barramenu);
 		
 		//Eventos de Menues
+		
+		creadas.addActionListener(e-> {
+			try {
+				VerOrdenesCreadas ver = new VerOrdenesCreadas();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		
 		aorden.addActionListener(e->{
 			AltaOrdenPedido alta = new AltaOrdenPedido();

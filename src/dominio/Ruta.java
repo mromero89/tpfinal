@@ -44,6 +44,10 @@ public class Ruta {
 	public void setPesomax(int pesomax) {
 		this.pesomax = pesomax;
 	}
+	public int intValue() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 
 }
