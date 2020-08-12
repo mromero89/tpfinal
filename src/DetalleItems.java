@@ -26,19 +26,21 @@ import dominio.OrdenPedido;
 import dominio.Planta;
 import dominio.Ruta;
 
-public class VerOrdenesCreadas extends JFrame {
+public class DetalleItems extends JFrame {
 	
+	private int nropedido;
 	JPanel principal = new JPanel();
 	
 	JTable tabla;
 	
 	
 	
-	VerOrdenesCreadas() throws SQLException{
+	DetalleItems(int nropedido) throws SQLException{
 		
 		
-		
-		super("Ver ordenes creadas");
+		super("Detalle items de la orden");
+		this.nropedido = nropedido;
+
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
 		ArrayList<Ruta> listarutas = ABMRuta.todos();
@@ -92,7 +94,7 @@ while(it.hasNext()){
 		
 		
 		
-		//JTable tabla = new JTable(2,3);
+		JTable tabla = new JTable(2,3);
 		//tabla.addColumn("Nombre");
 		
 		
@@ -106,15 +108,7 @@ while(it.hasNext()){
 		JButton agregar = new JButton("Detalle de items");
 		
 		agregar.addActionListener(e->{
-			try {
-				DetalleItems alta = new DetalleItems(Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()));
-				System.out.println(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-				//Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0))
-				
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			AltaItem alta = new AltaItem();
 		});
 		
 		
@@ -139,7 +133,7 @@ while(it.hasNext()){
 	
 	
 	private void consultar() {
-		ArrayList<OrdenPedido> lista = new ArrayList<OrdenPedido>();
+		ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>();
 		try {
 			//lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
 			
@@ -155,25 +149,21 @@ while(it.hasNext()){
 			connection = DriverManager.getConnection(
 			        "jdbc:postgresql://localhost:5432/postgres",
 			        "postgres", "wilson222");
-			PreparedStatement stn = connection.prepareStatement("SELECT * FROM ordenespedidos WHERE estado = \'CREADA\' ");
+			String consulta = "SELECT * FROM itemspedidos WHERE nropedido = "+nropedido;
+			PreparedStatement stn = connection.prepareStatement(consulta);
 			ResultSet rs = stn.executeQuery();
 			while(rs.next()) {
 				//Camion(String patente, String modelo, int kmrec, int costokm, int costoh, String fechacompra)
-				OrdenPedido aux = new OrdenPedido();
+				ItemPedido aux = new ItemPedido();
 				/*private String descripcion;
 				private String unidadmedida;
 				private int costo;
 				private String tipo;
 				private int peso;
 				private int densidad;*/
-				
-			
-				
-				aux.setNropedido(rs.getInt(1));
-				aux.setPlantaorigen(rs.getString(2));
-				aux.setPlantadestino(rs.getString(3));
-				aux.setFechaentrega(rs.getString(5));
-				aux.setEstado(rs.getString(6));
+				aux.setInsumo(rs.getString(2));
+				aux.setCantidad(rs.getInt(3));
+				aux.setCosto(rs.getInt(4));
 
 
 
@@ -196,14 +186,13 @@ while(it.hasNext()){
 			e1.printStackTrace();
 		}
 		int tamano = lista.size();
-		String [][]aux = new String [tamano][5];
+		String [][]aux = new String [tamano][3];
 		int i = 0; int j = 0;
-		for (OrdenPedido c : lista) {
-			aux[i][0]=String.valueOf(c.getNropedido());
-			aux[i][1]=c.getPlantaorigen();
-			aux[i][2]=c.getPlantadestino();
-			aux[i][3]=c.getFechaentrega();
-			aux[i][4]=c.getEstado();
+		for (ItemPedido c : lista) {
+			aux[i][0]=c.getInsumo();
+			aux[i][1]=String.valueOf(c.getCantidad());
+			aux[i][2]=String.valueOf(c.getCosto());
+			
 			i++;
 			
 			//areatext.append(i.getPatente()+"\n");
@@ -213,7 +202,7 @@ while(it.hasNext()){
 		//principal.remove(tabla);
 		//principal.revalidate();
 		//pack();
-		String titulos[] = {"Numero de pedido", "Planta de origen", "Planta Destino", "Fecha entrega", "Estado"};
+		String titulos[] = {"Insumo", "Cantidad", "Costo"};
 
 
 		JTable tablaresu = new JTable(aux, titulos);
