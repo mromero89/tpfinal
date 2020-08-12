@@ -1,5 +1,8 @@
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.awt.BorderLayout;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,6 +32,7 @@ import dominio.Ruta;
 public class DetalleItems extends JFrame {
 	
 	private int nropedido;
+	String plantadestino;
 	JPanel principal = new JPanel();
 	ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>();
 
@@ -38,11 +42,12 @@ public class DetalleItems extends JFrame {
 	JTextField campoplantasci;
 	
 	
-	DetalleItems(int nropedido) throws SQLException{
+	DetalleItems(int nropedido, String plantadestino) throws SQLException{
 		
 		
 		super("Detalle items de la orden "+nropedido);
 		this.nropedido = nropedido;
+		this.plantadestino = plantadestino;
 
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
@@ -65,10 +70,35 @@ public class DetalleItems extends JFrame {
 	
 	//public Map<T,Integer> caminosMinimoDikstra(T valorOrigen){
 
-	graf.caminosMinimoDikstra("Santa Fe");
+	
+	
+	/*ESTO ES UNA GENIALIDAD*/
+	
+	/*
+	int minimo = 99999;
+	String plantaelegida = "";
+	Map<String, Integer> a = graf.caminosMinimoDikstra("Santa Fe");
+	Iterator it = a.keySet().iterator();
+	while(it.hasNext()){
+	  String key = (String) it.next();
+	  if (key.equals("Buenos Aires")) {
+		  if (a.get(key) <= minimo) {
+			  minimo = a.get(key);
+			  plantaelegida = "Santa Fe";
+		  }
+			  
+	  }
+	  //System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
+	}
+	System.out.println("La planta elegida es: "+plantaelegida);
+	
 	graf.caminosMinimoDikstra("Cordoba");
 	graf.caminos("Santa Fe", "Buenos Aires");
 	graf.caminos("Cordoba", "Buenos Aires");
+	*/
+	
+	/*HASTA ACA LA GENIALIDAD*/
+	
 	
 	//System.out.println("Camino SF -> ER"+graf.existeCamino(new Vertice<String>("Santa Fe"), new Vertice<String>("Buenos Aires"), 0));
 	
@@ -192,6 +222,61 @@ for (Planta i : todaslasplantas)
 			principal.add(plantasci);
 			principal.add(campoplantasci);
 			principal.revalidate();
+			
+			int minimo = 99999;
+			String plantaelegida = "";
+			for (Planta p : plantascontodosinsumos) {
+				Map<String, Integer> a = graf.caminosMinimoDikstra(p.getNombre());
+				Iterator it = a.keySet().iterator();
+				while(it.hasNext()){
+					  String key = (String) it.next();
+					  //System.out.println("Planta destino recibida: "+this.plantadestino);
+					  //System.out.println("Nro pedido: "+this.nropedido);
+					  if (key.equals(this.plantadestino)) {
+						  if (a.get(key) <= minimo) {
+							  minimo = a.get(key);
+							  plantaelegida = p.getNombre();
+						  }
+							  
+					  }
+					  //System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
+					}
+			}
+		
+			System.out.println("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
+			System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
+			List<List<Vertice<String>>> a = graf.caminos(plantaelegida, this.plantadestino);
+			for (List<Vertice<String>> q : a) {
+				//List<Vertice<String>> aux = q;
+				Integer suma = 0;
+				int contador = 1;
+				Vertice<String> auxiliar1 = null, auxiliar2 = null;
+				for (Vertice<String> t : q) {
+					//System.out.println("trabajando con elemento: "+t.getValor());
+					if (contador % 2 != 0) {
+						auxiliar1 = t;
+						contador++;
+						//System.out.println("Valor de auxiliar1: "+t.getValor());
+					}
+					else {
+						auxiliar2 = t;
+						//System.out.println("Valor de auxiliar2: "+t.getValor());
+						suma += (Integer) graf.buscarArista(auxiliar1, auxiliar2).getValor();
+						contador++;
+					}
+					//System.out.println("Elemento: "+t);
+					// aca tendria que haber una consulta de cuanto mide el tramo
+				
+				}
+				int suma2 = suma;
+				if (suma2 == minimo) {
+					System.out.println("El mejor camino es:"+q);
+				}
+			}
+			/*
+			graf.caminosMinimoDikstra("Cordoba");
+			graf.caminos("Santa Fe", "Buenos Aires");
+			graf.caminos("Cordoba", "Buenos Aires");*/
 
 		}
 

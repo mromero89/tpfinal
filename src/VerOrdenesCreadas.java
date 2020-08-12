@@ -107,7 +107,7 @@ while(it.hasNext()){
 		
 		agregar.addActionListener(e->{
 			try {
-				DetalleItems alta = new DetalleItems(Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()));
+				DetalleItems alta = new DetalleItems(Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()), this.tabla.getValueAt(tabla.getSelectedRow(), 2).toString());
 				//System.out.println(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				//Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0))
 				
