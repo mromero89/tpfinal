@@ -30,6 +30,8 @@ public class DetalleItems extends JFrame {
 	
 	private int nropedido;
 	JPanel principal = new JPanel();
+	ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>();
+
 	
 	JTable tabla;
 	
@@ -38,7 +40,7 @@ public class DetalleItems extends JFrame {
 	DetalleItems(int nropedido) throws SQLException{
 		
 		
-		super("Detalle items de la orden");
+		super("Detalle items de la orden "+nropedido);
 		this.nropedido = nropedido;
 
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
@@ -104,7 +106,77 @@ while(it.hasNext()){
 	
 		
 		this.consultar();
+		//CONSULTA DE PLANTAS CON STOCK
+		ArrayList<Planta> rsconsulta = new ArrayList<Planta>();
+
+		for (Planta i : listaplantas) {
+			//String query = "SELECT nombreplanta FROM insumosplantas WHERE "
+			for (ItemPedido j : lista) {
+				//String cont = "insumo = \'"+j.getInsumo()+"\' AND cantidad >= "+j.getCantidad();
+				//Ver si planta.cantItem >= canItemPedido
+				//consulta SQL 
+				
+				 try { 
+		    Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException ex) {
+		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+		}
 		
+
+		Connection connection = null;
+		// Database connect
+		// Conectamos con la base de datos
+		connection = DriverManager.getConnection(
+		        "jdbc:postgresql://localhost:5432/postgres",
+		        "postgres", "wilson222");
+		String consulta = "SELECT * FROM insumosplantas WHERE insumo = \'"+j.getInsumo()+"\' AND cantidad >="+j.getCantidad()+" AND nombreplanta = \'"+i.getNombre()+"\'";
+		System.out.println(consulta);
+		PreparedStatement stn = connection.prepareStatement(consulta);
+		ResultSet rs = stn.executeQuery();
+		while(rs.next()) { 
+				 Planta aux = new Planta();
+				 aux.setNombre(rs.getString("nombreplanta"));
+				 rsconsulta.add(aux);
+				/*FIn consulta SQL */
+			}
+		}
+		}
+		
+		for (Planta i : rsconsulta) {
+			System.out.println("Nombre planta: "+i.getNombre());
+		}
+		
+		/*
+		 rsconsulta = ArrayList<Planta>
+int tamanoconsulta = .... ;
+for (Planta i : todaslasplantas)
+	int cont =0;
+	for(Planta j : rsconsulta)
+	if (i.getNombre().equals(j.getNombre()){
+	cont++;
+	}
+	if (cont == tamanoconsulta)
+	//agregar planta a lista de plantas que contienen todos los insumos
+		  
+		*/
+		ArrayList<Planta> plantascontodosinsumos = new ArrayList<Planta>();
+		int tamanoconsulta = lista.size();
+		for (Planta i : listaplantas) {
+			int cont = 0;
+			for (Planta j : rsconsulta) {
+				if (i.getNombre().equals(j.getNombre()))
+					cont++;
+			}
+			if (cont == tamanoconsulta)
+				plantascontodosinsumos.add(i);
+		}
+		
+		System.out.println("Las plantas que tienen todos los insumos del pedido son las siguientes:");
+		for (Planta k : plantascontodosinsumos) {
+			System.out.println(k.getNombre());
+		}
+			
+		// HASTA ACA, CONSULTA DE PLANTAS QUE CUMPLEN CON STOCK
 		JButton agregar = new JButton("Detalle de items");
 		
 		agregar.addActionListener(e->{
@@ -133,7 +205,6 @@ while(it.hasNext()){
 	
 	
 	private void consultar() {
-		ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>();
 		try {
 			//lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
 			
@@ -161,9 +232,9 @@ while(it.hasNext()){
 				private String tipo;
 				private int peso;
 				private int densidad;*/
-				aux.setInsumo(rs.getString(2));
-				aux.setCantidad(rs.getInt(3));
-				aux.setCosto(rs.getInt(4));
+				aux.setInsumo(rs.getString(1));
+				aux.setCantidad(rs.getInt(2));
+				aux.setCosto(rs.getInt(3));
 
 
 
