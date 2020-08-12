@@ -34,7 +34,8 @@ public class DetalleItems extends JFrame {
 
 	
 	JTable tabla;
-	
+	JTextField plantasci = new JTextField("Plantas con todos los insumos del pedido:");
+	JTextField campoplantasci;
 	
 	
 	DetalleItems(int nropedido) throws SQLException{
@@ -65,7 +66,10 @@ public class DetalleItems extends JFrame {
 	//public Map<T,Integer> caminosMinimoDikstra(T valorOrigen){
 
 	graf.caminosMinimoDikstra("Santa Fe");
+	graf.caminosMinimoDikstra("Cordoba");
 	graf.caminos("Santa Fe", "Buenos Aires");
+	graf.caminos("Cordoba", "Buenos Aires");
+	
 	//System.out.println("Camino SF -> ER"+graf.existeCamino(new Vertice<String>("Santa Fe"), new Vertice<String>("Buenos Aires"), 0));
 	
 	//List<List<Vertice<String>>> a = graf.caminos("Nodo1", "Nodo4");
@@ -130,7 +134,7 @@ while(it.hasNext()){
 		        "jdbc:postgresql://localhost:5432/postgres",
 		        "postgres", "wilson222");
 		String consulta = "SELECT * FROM insumosplantas WHERE insumo = \'"+j.getInsumo()+"\' AND cantidad >="+j.getCantidad()+" AND nombreplanta = \'"+i.getNombre()+"\'";
-		System.out.println(consulta);
+		//System.out.println(consulta);
 		PreparedStatement stn = connection.prepareStatement(consulta);
 		ResultSet rs = stn.executeQuery();
 		while(rs.next()) { 
@@ -141,10 +145,10 @@ while(it.hasNext()){
 			}
 		}
 		}
-		
+		/*
 		for (Planta i : rsconsulta) {
 			System.out.println("Nombre planta: "+i.getNombre());
-		}
+		}*/
 		
 		/*
 		 rsconsulta = ArrayList<Planta>
@@ -171,13 +175,32 @@ for (Planta i : todaslasplantas)
 				plantascontodosinsumos.add(i);
 		}
 		
-		System.out.println("Las plantas que tienen todos los insumos del pedido son las siguientes:");
-		for (Planta k : plantascontodosinsumos) {
-			System.out.println(k.getNombre());
+		if (plantascontodosinsumos.size() == 0)
+			System.out.println("No hay plantas que tengan todos los insumos del pedido!");
+		
+		else
+		{
+			//System.out.println("Las plantas que tienen todos los insumos del pedido son las siguientes:");
+			
+			String plantascontodos = "";
+			for (Planta k : plantascontodosinsumos) {
+				plantascontodos = plantascontodos + k.getNombre() + "; ";
+				//System.out.println(k.getNombre());
+				
+			}
+			campoplantasci = new JTextField(plantascontodos);
+			principal.add(plantasci);
+			principal.add(campoplantasci);
+			principal.revalidate();
+
 		}
+
+		
+		
 			
 		// HASTA ACA, CONSULTA DE PLANTAS QUE CUMPLEN CON STOCK
 		JButton agregar = new JButton("Detalle de items");
+		
 		
 		agregar.addActionListener(e->{
 			AltaItem alta = new AltaItem();

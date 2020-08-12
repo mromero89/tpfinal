@@ -42,7 +42,7 @@ public class VerOrdenesCreadas extends JFrame {
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
 		ArrayList<Ruta> listarutas = ABMRuta.todos();
-
+/*
 	Grafo<String> graf = new Grafo<String>();
 	//CArgando el grafo de DISTANCIAS
 	for (Planta i : listaplantas) {
@@ -61,7 +61,7 @@ public class VerOrdenesCreadas extends JFrame {
 	//public Map<T,Integer> caminosMinimoDikstra(T valorOrigen){
 
 	graf.caminosMinimoDikstra("Santa Fe");
-	graf.caminos("Santa Fe", "Buenos Aires");
+	graf.caminos("Santa Fe", "Buenos Aires");*/
 	//System.out.println("Camino SF -> ER"+graf.existeCamino(new Vertice<String>("Santa Fe"), new Vertice<String>("Buenos Aires"), 0));
 	
 	//List<List<Vertice<String>>> a = graf.caminos("Nodo1", "Nodo4");
@@ -108,7 +108,7 @@ while(it.hasNext()){
 		agregar.addActionListener(e->{
 			try {
 				DetalleItems alta = new DetalleItems(Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()));
-				System.out.println(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+				//System.out.println(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				//Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0))
 				
 			} catch (SQLException e1) {
