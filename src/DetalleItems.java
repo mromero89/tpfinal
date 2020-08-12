@@ -252,16 +252,20 @@ for (Planta i : todaslasplantas)
 				int contador = 1;
 				Vertice<String> auxiliar1 = null, auxiliar2 = null;
 				for (Vertice<String> t : q) {
-					//System.out.println("trabajando con elemento: "+t.getValor());
+					System.out.println("trabajando con elemento: "+t.getValor());
 					if (contador % 2 != 0) {
 						auxiliar1 = t;
+						if (contador != 1) {
+							suma += (Integer) graf.buscarArista(auxiliar2, auxiliar1).getValor();
+						}
 						contador++;
-						//System.out.println("Valor de auxiliar1: "+t.getValor());
+						System.out.println("Valor de auxiliar1: "+t.getValor());
 					}
 					else {
 						auxiliar2 = t;
-						//System.out.println("Valor de auxiliar2: "+t.getValor());
+						System.out.println("Valor de auxiliar2: "+t.getValor());
 						suma += (Integer) graf.buscarArista(auxiliar1, auxiliar2).getValor();
+						System.out.println("Suma:"+suma);
 						contador++;
 					}
 					//System.out.println("Elemento: "+t);
@@ -269,6 +273,7 @@ for (Planta i : todaslasplantas)
 				
 				}
 				int suma2 = suma;
+				System.out.println("Suma2: "+suma2);
 				if (suma2 == minimo) {
 					System.out.println("El mejor camino es:"+q);
 				}
