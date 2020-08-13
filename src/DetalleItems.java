@@ -12,8 +12,10 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -31,14 +33,21 @@ import dominio.Ruta;
 
 public class DetalleItems extends JFrame {
 	
+	//Se reciben como parametros el nro de pedido y la planta de destino
 	private int nropedido;
 	String plantadestino;
+	
 	JPanel principal = new JPanel();
-	ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>();
+	JTable tablarutas;
+	
+	//LISTA CON TODOS LOS ITEMS DEL NUMERO DE PEDIDO DADO, SE CARGA CON THIS.CONSULTA()	
+	ArrayList<ItemPedido> lista = new ArrayList<ItemPedido>(); 
 
 	
 	JTable tabla;
-	JTextField plantasci = new JTextField("Plantas con todos los insumos del pedido:");
+	JTable tabla2;
+	
+	JLabel plantasci = new JLabel("Plantas con todos los insumos del pedido:");
 	JTextField campoplantasci;
 	
 	
@@ -63,6 +72,20 @@ public class DetalleItems extends JFrame {
 		graf.conectar(i.getOrigen().getNombre(), i.getDestino().getNombre(), i.getDistanciakm());
 	}
 	
+	//FIN DE CARGA DE GRAFO
+	
+	
+	//CARGA DE GRAFO DE DURACIONES
+	Grafo<String> grafd = new Grafo<String>();
+	//CArgando el grafo de DISTANCIAS
+	for (Planta i : listaplantas) {
+		grafd.addNodo(i.getNombre());
+	}
+	
+	for (Ruta i : listarutas) {
+		grafd.conectar(i.getOrigen().getNombre(), i.getDestino().getNombre(), i.getDuracionh());
+	}
+	//FIN DE CARGA DE GRAFO DURACIONES
 	
 	
 	//public void conectar(T n1,T n2,Number valor)	
@@ -99,47 +122,15 @@ public class DetalleItems extends JFrame {
 	
 	/*HASTA ACA LA GENIALIDAD*/
 	
-	
-	//System.out.println("Camino SF -> ER"+graf.existeCamino(new Vertice<String>("Santa Fe"), new Vertice<String>("Buenos Aires"), 0));
-	
-	//List<List<Vertice<String>>> a = graf.caminos("Nodo1", "Nodo4");
-	
-	
-/*
-	Map<String, Integer> lista = graf.caminosMinimoDikstra("Nodo1");
-	/*
-	for (String i : lista) {
-		System.out.println(i);
-	}
-Iterator it = lista.keySet().iterator();
-while(it.hasNext()){
-  String key = (String) it.next();
-  System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
-}
-
-*/
 
 		this.setVisible(true);
-		//this.setLayout();
 		
-		
-	
-		
-		
-		
-		
-		
-		
-		JTable tabla = new JTable(2,3);
-		//tabla.addColumn("Nombre");
-		
-		
-		
-		//JPanel principal = new JPanel();
+
 		this.setContentPane(principal);
 	
 		
 		this.consultar();
+		
 		//CONSULTA DE PLANTAS CON STOCK
 		ArrayList<Planta> rsconsulta = new ArrayList<Planta>();
 
@@ -173,26 +164,14 @@ while(it.hasNext()){
 				 rsconsulta.add(aux);
 				/*FIn consulta SQL */
 			}
-		}
-		}
-		/*
-		for (Planta i : rsconsulta) {
-			System.out.println("Nombre planta: "+i.getNombre());
-		}*/
+		stn.close();
 		
-		/*
-		 rsconsulta = ArrayList<Planta>
-int tamanoconsulta = .... ;
-for (Planta i : todaslasplantas)
-	int cont =0;
-	for(Planta j : rsconsulta)
-	if (i.getNombre().equals(j.getNombre()){
-	cont++;
-	}
-	if (cont == tamanoconsulta)
-	//agregar planta a lista de plantas que contienen todos los insumos
-		  
-		*/
+		
+		connection.close();
+		}
+		}
+		
+		
 		ArrayList<Planta> plantascontodosinsumos = new ArrayList<Planta>();
 		int tamanoconsulta = lista.size();
 		for (Planta i : listaplantas) {
@@ -205,24 +184,40 @@ for (Planta i : todaslasplantas)
 				plantascontodosinsumos.add(i);
 		}
 		
-		if (plantascontodosinsumos.size() == 0)
+		if (plantascontodosinsumos.size() == 0) {
 			System.out.println("No hay plantas que tengan todos los insumos del pedido!");
+			 JOptionPane.showMessageDialog(null, "No existen plantas con insumos para cubrir esta orden. La orden se marcará como CANCELADA.", "Error",0);
+			 //hacer consulta SQL para marcar orden de pedido como CANCELADA
+		}
 		
 		else
 		{
 			//System.out.println("Las plantas que tienen todos los insumos del pedido son las siguientes:");
 			
 			String plantascontodos = "";
+			
+			//SE PREPARA LA TABLA CON TODAS LAS PLANTAS QUE TIENEN TODOS LOS ITEMS DEL PEDIDO
+			int tamanolistaplantas = plantascontodosinsumos.size();
+			String[][] auxiliar = new String[tamanolistaplantas][1];
+			int z = 0;
 			for (Planta k : plantascontodosinsumos) {
 				plantascontodos = plantascontodos + k.getNombre() + "; ";
-				//System.out.println(k.getNombre());
+				auxiliar[z][0] = k.getNombre();
+				z++;
+				
 				
 			}
-			campoplantasci = new JTextField(plantascontodos);
+			String titles[] = {"Plantas"};
+			tabla2 = new JTable(auxiliar, titles);
 			principal.add(plantasci);
+
+			principal.add(tabla2);
+			campoplantasci = new JTextField(plantascontodos);
 			principal.add(campoplantasci);
 			principal.revalidate();
 			
+			
+			//SE ELIGE LA PLANTA CON EL CAMINO MAS CORTO
 			int minimo = 99999;
 			String plantaelegida = "";
 			for (Planta p : plantascontodosinsumos) {
@@ -245,7 +240,11 @@ for (Planta i : todaslasplantas)
 		
 			System.out.println("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
+			
+			
+			//OLA KE ASÉ  --- ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			List<List<Vertice<String>>> a = graf.caminos(plantaelegida, this.plantadestino);
+			ArrayList<String> rutaselegidas = new ArrayList<String>();
 			for (List<Vertice<String>> q : a) {
 				//List<Vertice<String>> aux = q;
 				Integer suma = 0;
@@ -276,12 +275,33 @@ for (Planta i : todaslasplantas)
 				System.out.println("Suma2: "+suma2);
 				if (suma2 == minimo) {
 					System.out.println("El mejor camino es:"+q);
+					rutaselegidas.add(q.toString());
+					
 				}
 			}
-			/*
-			graf.caminosMinimoDikstra("Cordoba");
-			graf.caminos("Santa Fe", "Buenos Aires");
-			graf.caminos("Cordoba", "Buenos Aires");*/
+			System.out.println("para agregar a la interfaz grafica");
+			for (String i : rutaselegidas) {
+				System.out.println(i);
+			}
+			
+			int tamanotabla = rutaselegidas.size();
+			
+			String [][]auxtabla = new String [tamanotabla][1];
+			String []titulos = {"Rutas"};
+			int contador = 0;
+			for(String i : rutaselegidas) {
+				auxtabla[contador][0] = i;
+				contador++;
+			}
+			
+			
+			
+			tablarutas = new JTable(auxtabla, titulos);
+
+			JFrame rutas = new JFrame("Rutas ");
+			rutas.add(tablarutas);
+			rutas.setVisible(true);
+			
 
 		}
 
@@ -289,11 +309,102 @@ for (Planta i : todaslasplantas)
 		
 			
 		// HASTA ACA, CONSULTA DE PLANTAS QUE CUMPLEN CON STOCK
-		JButton agregar = new JButton("Detalle de items");
+		JButton agregar = new JButton("Ruta mas corta en KM");
 		
 		
 		agregar.addActionListener(e->{
-			AltaItem alta = new AltaItem();
+			int minimo = 99999;
+			String plantaelegida = "";
+			//for (Planta p : plantascontodosinsumos) {
+				Map<String, Integer> b = graf.caminosMinimoDikstra(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+				Iterator it = b.keySet().iterator();
+				while(it.hasNext()){
+					  String key = (String) it.next();
+					  //System.out.println("Planta destino recibida: "+this.plantadestino);
+					  //System.out.println("Nro pedido: "+this.nropedido);
+					  if (key.equals(this.plantadestino)) {
+						  if (b.get(key) <= minimo) {
+							  minimo = b.get(key);
+							  plantaelegida = key;
+						  }
+							  
+					  }
+					  //System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
+					}
+			//}
+			
+			//OLA KE ASÉ  --- ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
+			//Integer.valueOf(this.tablarutas.getValueAt(tabla.getSelectedRow(), 0).toString())
+			System.out.println("Valor elegido como planta elegida de la tabla: ");
+			//System.out.println(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+			System.out.println("Seleccionado: "+this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+
+			
+			List<List<Vertice<String>>> a = graf.caminos(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString(), this.plantadestino);
+			ArrayList<String> rutaselegidas = new ArrayList<String>();
+			for (List<Vertice<String>> q : a) {
+				//List<Vertice<String>> aux = q;
+				Integer suma = 0;
+				int contador = 1;
+				Vertice<String> auxiliar1 = null, auxiliar2 = null;
+				for (Vertice<String> t : q) {
+					System.out.println("trabajando con elemento: "+t.getValor());
+					if (contador % 2 != 0) {
+						auxiliar1 = t;
+						if (contador != 1) {
+							suma += (Integer) graf.buscarArista(auxiliar2, auxiliar1).getValor();
+						}
+						contador++;
+						System.out.println("Valor de auxiliar1: "+t.getValor());
+					}
+					else {
+						auxiliar2 = t;
+						System.out.println("Valor de auxiliar2: "+t.getValor());
+						suma += (Integer) graf.buscarArista(auxiliar1, auxiliar2).getValor();
+						System.out.println("Suma:"+suma);
+						contador++;
+					}
+					//System.out.println("Elemento: "+t);
+					// aca tendria que haber una consulta de cuanto mide el tramo
+				
+				}
+				int suma2 = suma;
+				System.out.println("Suma2: "+suma2);
+				/*
+				System.out.println("El camino es: "+q);
+				rutaselegidas.add(q.toString());
+*/
+				
+				if (suma2 == minimo) {
+					System.out.println("El mejor camino es:"+q);
+					rutaselegidas.add(q.toString());
+					
+				}
+			}
+			System.out.println("para agregar a la interfaz grafica");
+			for (String i : rutaselegidas) {
+				System.out.println(i);
+			}
+			
+			int tamanotabla = rutaselegidas.size();
+			
+			String [][]auxtabla = new String [tamanotabla][1];
+			String []titulos = {"Rutas"};
+			int contador = 0;
+			for(String i : rutaselegidas) {
+				auxtabla[contador][0] = i;
+				contador++;
+			}
+			
+			
+			
+			JTable tablarutas = new JTable(auxtabla, titulos);
+
+			JFrame rutas = new JFrame("Rutas 2 ");
+			rutas.add(tablarutas);
+			rutas.setVisible(true);
+			
+			
 		});
 		
 		
