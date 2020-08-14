@@ -310,6 +310,7 @@ public class DetalleItems extends JFrame {
 			
 		// HASTA ACA, CONSULTA DE PLANTAS QUE CUMPLEN CON STOCK
 		JButton agregar = new JButton("Ruta mas corta en KM");
+		JButton rutamasrapida = new JButton("Ruta mas rapida");
 		
 		
 		agregar.addActionListener(e->{
@@ -333,7 +334,7 @@ public class DetalleItems extends JFrame {
 					}
 			//}
 			
-			//OLA KE ASÉ  --- ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
+			//ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			//Integer.valueOf(this.tablarutas.getValueAt(tabla.getSelectedRow(), 0).toString())
 			System.out.println("Valor elegido como planta elegida de la tabla: ");
 			//System.out.println(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
@@ -407,6 +408,100 @@ public class DetalleItems extends JFrame {
 			
 		});
 		
+		rutamasrapida.addActionListener(e->{
+			int minimo = 99999;
+			String plantaelegida = "";
+			//for (Planta p : plantascontodosinsumos) {
+				Map<String, Integer> b = grafd.caminosMinimoDikstra(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+				Iterator it = b.keySet().iterator();
+				while(it.hasNext()){
+					  String key = (String) it.next();
+					  //System.out.println("Planta destino recibida: "+this.plantadestino);
+					  //System.out.println("Nro pedido: "+this.nropedido);
+					  if (key.equals(this.plantadestino)) {
+						  if (b.get(key) <= minimo) {
+							  minimo = b.get(key);
+							  plantaelegida = key;
+						  }
+							  
+					  }
+					  //System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
+					}
+			//}
+			
+			//ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
+			//Integer.valueOf(this.tablarutas.getValueAt(tabla.getSelectedRow(), 0).toString())
+			System.out.println("Valor elegido como planta elegida de la tabla: ");
+			//System.out.println(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+			System.out.println("Seleccionado: "+this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+
+			
+			List<List<Vertice<String>>> a = grafd.caminos(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString(), this.plantadestino);
+			ArrayList<String> rutaselegidas = new ArrayList<String>();
+			for (List<Vertice<String>> q : a) {
+				//List<Vertice<String>> aux = q;
+				Integer suma = 0;
+				int contador = 1;
+				Vertice<String> auxiliar1 = null, auxiliar2 = null;
+				for (Vertice<String> t : q) {
+					System.out.println("trabajando con elemento: "+t.getValor());
+					if (contador % 2 != 0) {
+						auxiliar1 = t;
+						if (contador != 1) {
+							suma += (Integer) grafd.buscarArista(auxiliar2, auxiliar1).getValor();
+						}
+						contador++;
+						System.out.println("Valor de auxiliar1: "+t.getValor());
+					}
+					else {
+						auxiliar2 = t;
+						System.out.println("Valor de auxiliar2: "+t.getValor());
+						suma += (Integer) grafd.buscarArista(auxiliar1, auxiliar2).getValor();
+						System.out.println("Suma:"+suma);
+						contador++;
+					}
+					//System.out.println("Elemento: "+t);
+					// aca tendria que haber una consulta de cuanto mide el tramo
+				
+				}
+				int suma2 = suma;
+				System.out.println("Suma2: "+suma2);
+				/*
+				System.out.println("El camino es: "+q);
+				rutaselegidas.add(q.toString());
+*/
+				
+				if (suma2 == minimo) {
+					System.out.println("El mejor camino es:"+q);
+					rutaselegidas.add(q.toString());
+					
+				}
+			}
+			System.out.println("para agregar a la interfaz grafica");
+			for (String i : rutaselegidas) {
+				System.out.println(i);
+			}
+			
+			int tamanotabla = rutaselegidas.size();
+			
+			String [][]auxtabla = new String [tamanotabla][1];
+			String []titulos = {"Rutas"};
+			int contador = 0;
+			for(String i : rutaselegidas) {
+				auxtabla[contador][0] = i;
+				contador++;
+			}
+			
+			
+			
+			JTable tablarutas = new JTable(auxtabla, titulos);
+
+			JFrame rutas = new JFrame("Rutas 2 ");
+			rutas.add(tablarutas);
+			rutas.setVisible(true);
+			
+			
+		});
 		
 		
 	
@@ -418,6 +513,7 @@ public class DetalleItems extends JFrame {
 		//principal.add(numeropedido);
 		//principal.add(camponumeropedido);
 		principal.add(agregar);
+		principal.add(rutamasrapida);
 		
 	
 		
