@@ -49,6 +49,8 @@ public class DetalleItems extends JFrame {
 	
 	JTable tabla;
 	JTable tabla2;
+	JLabel info = new JLabel();
+
 	
 	JLabel plantasci = new JLabel("Plantas con todos los insumos del pedido:");
 	JTextField campoplantasci;
@@ -228,6 +230,41 @@ public class DetalleItems extends JFrame {
 			System.out.println("No hay plantas que tengan todos los insumos del pedido!");
 			 JOptionPane.showMessageDialog(null, "No existen plantas con insumos para cubrir esta orden. La orden se marcará como CANCELADA.", "Error",0);
 			 //hacer consulta SQL para marcar orden de pedido como CANCELADA
+			 
+			
+					
+					try { 
+					    Class.forName("org.postgresql.Driver");
+					} catch (ClassNotFoundException ex) {
+					    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+					}
+					
+
+					Connection connection = null;
+					// Database connect
+					// Conectamos con la base de datos
+					connection = DriverManager.getConnection(
+					        "jdbc:postgresql://localhost:5432/postgres",
+					        "postgres", "wilson222");
+					Statement stn = connection.createStatement();
+					//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
+					
+					//System.out.println("palabra sql: UPDATE camiones SET patente = \'"+patente+"\', modelo = \'"+modelo+"\', kmrec ="+kmrec+", costokm ="+costokm+", costohora="+costohora+", fechacompra= \'"+fecha+"\' WHERE patente = \'"+clave+"\'");
+					
+						stn.executeUpdate("UPDATE ordenespedidos SET estado = \'CANCELADA\' WHERE nropedido = "+this.nropedido);
+						
+					
+					
+						stn.close();
+					
+					
+						connection.close();
+					
+					
+					
+				
+			 
+			 
 		}
 		
 		else
@@ -280,7 +317,7 @@ public class DetalleItems extends JFrame {
 		
 			System.out.println("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
-			
+			info.setText("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			
 			//OLA KE ASÉ  --- ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			List<List<Vertice<String>>> a = graf.caminos(plantaelegida, this.plantadestino);
@@ -441,9 +478,16 @@ public class DetalleItems extends JFrame {
 			
 			JTable tablarutas = new JTable(auxtabla, titulos);
 
-			JFrame rutas = new JFrame("Rutas 2 ");
-			rutas.add(tablarutas);
+			JFrame rutas = new JFrame("Ruta mas corta en KM");
+			JButton seleccionar = new JButton("Seleccionar ruta");
+			JPanel panel = new JPanel();
+			
+			rutas.setContentPane(panel);
+			panel.add(tablarutas);
+			panel.add(seleccionar);
+			
 			rutas.setVisible(true);
+			
 			
 			
 		});
@@ -536,9 +580,20 @@ public class DetalleItems extends JFrame {
 			
 			JTable tablarutas = new JTable(auxtabla, titulos);
 
-			JFrame rutas = new JFrame("Rutas 2 ");
-			rutas.add(tablarutas);
+			JFrame rutas = new JFrame("Ruta mas corta en duracion");
+			//JPanel panelruta = new JPanel();
+			//rutas.setContentPane(panelruta);
+			JButton seleccionar = new JButton("Seleccionar ruta");
+
+		
+			
+			JPanel panel = new JPanel();
+			
+			rutas.setContentPane(panel);
+			panel.add(tablarutas);
+			panel.add(seleccionar);
 			rutas.setVisible(true);
+
 			
 			
 		});
@@ -552,8 +607,10 @@ public class DetalleItems extends JFrame {
 		//principal.add(campofechamaxima);
 		//principal.add(numeropedido);
 		//principal.add(camponumeropedido);
+		principal.add(info);
 		principal.add(agregar);
 		principal.add(rutamasrapida);
+
 		
 	
 		
