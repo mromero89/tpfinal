@@ -1,6 +1,6 @@
 package dominio;
 
-public class Camion {
+public class Camion implements Comparable<Camion>{
 	
 	private String patente;
 	private String modelo;
@@ -47,6 +47,13 @@ public class Camion {
 
 	public String getFechacompra() {
 		return fechacompra;
+	}
+
+	@Override
+	public int compareTo(Camion o) {
+		//Compara los camiones segun el kilometraje hecho
+		
+		return (this.kmrec-o.getKmrec());
 	}
 
 }

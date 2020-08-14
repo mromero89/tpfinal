@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -12,13 +13,17 @@ import javax.swing.JPanel;
 
 import dao.ABMRuta;
 import dao.AMBPlanta;
+import dominio.Camion;
 import dominio.Planta;
 import dominio.Ruta;
 
 public class ScreenPrincipal extends JFrame {
 	
 	ScreenPrincipal() {
+		
 		super("Sistema de gestion de plantas");
+	
+		
 		this.setVisible(true);
 
 		

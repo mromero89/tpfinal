@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.awt.BorderLayout;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,8 +24,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import dao.ABMRuta;
+import dao.AMBCamion;
 import dao.AMBPlanta;
 import dominio.Camion;
+import dominio.DetalleEnvio;
 import dominio.Insumo;
 import dominio.ItemPedido;
 import dominio.OrdenPedido;
@@ -50,6 +53,40 @@ public class DetalleItems extends JFrame {
 	JLabel plantasci = new JLabel("Plantas con todos los insumos del pedido:");
 	JTextField campoplantasci;
 	
+	private Camion asignarCamion() {
+		//public Camion(String patente, String modelo, int kmrec, int costokm, int costoh, String fechacompra)
+        PriorityQueue<Camion> queue = new PriorityQueue<Camion>(); 
+        try {
+			ArrayList<Camion> listacamiones = dao.AMBCamion.todos();
+			ArrayList<DetalleEnvio> listadetallesenvio = dao.ABMDetalleEnvio.todos();
+			//Obtengo las patentes de los camiones que tienen asignados pedidos
+			ArrayList<String> patentes = new ArrayList<String>();
+			for (DetalleEnvio i : listadetallesenvio) {
+				patentes.add(i.getPatente());
+			}
+			
+			for (Camion i : listacamiones) {
+				//Si el camion seleccionado no se encuentra destinado a un envio, se agrega a la cola de prioridades
+				if (!(patentes.contains(i.getPatente()))){
+					queue.add(i);
+
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
+  
+        System.out.println("Priority queue values are: " + queue); 
+        for (Camion i : queue) {
+        	System.out.println(i.getPatente());
+        }
+		return queue.poll();
+	}
+	
 	
 	DetalleItems(int nropedido, String plantadestino) throws SQLException{
 		
@@ -57,6 +94,9 @@ public class DetalleItems extends JFrame {
 		super("Detalle items de la orden "+nropedido);
 		this.nropedido = nropedido;
 		this.plantadestino = plantadestino;
+		
+		Camion camionasig = asignarCamion();
+		System.out.println("EL CAMION ASIGNADO ES: "+camionasig.getPatente());
 
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
