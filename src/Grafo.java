@@ -373,6 +373,10 @@ public class Grafo<T> {
 		}
 		return false;
 	}
+
+	public List<Arista<T>> getAristas() {
+		return aristas;
+	}
     
     
 }

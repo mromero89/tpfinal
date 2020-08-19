@@ -319,6 +319,119 @@ public class DetalleItems extends JFrame {
 			System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
 			info.setText("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			
+			
+			int fmax = 0;
+			System.out.println("ingresando a rutina prototipo para fmax");
+			System.out.println("Planta inicio: "+plantaelegida);
+			System.out.println("Planta fin: "+this.plantadestino);
+			List<List<Vertice<String>>> listnodes = graf.caminos(plantaelegida, this.plantadestino);
+			for (List<Vertice<String>> i : listnodes) {
+				int minimoc = 99999;
+				Vertice<String> nodo1, nodo2;
+				nodo1 = null; nodo2 = null;
+				List<Vertice<String>> auxi = i;
+				List<Vertice<String>> auxi2 = auxi;
+				for (Vertice<String> j : auxi) {
+					//evaluar si el nodo no es el final
+					if (!(j.equals(this.plantadestino))) {
+						
+						//asignacion de nodos
+						if (nodo1 == null) {
+							nodo1 =j;
+						}
+						else if ((nodo1 != null) && (nodo2 == null)){
+							nodo2 = j;
+
+						}
+						else {
+							nodo1 = nodo2;
+							nodo2 = j;
+						}
+					if (nodo1 != null && nodo2 != null) {
+						
+						//buscar arista en la lista de aristas del grafo
+						Arista<String> aux = null;
+						//List<Arista<T>> getAristas()
+						List<Arista<String>> listadearistas = graf.getAristas();
+						
+						aux = graf.buscarArista(nodo1, nodo2);
+						System.out.println("La arista seleccionada es la q va de "+aux.getInicio()+" a "+aux.getFin());
+						System.out.println("con el valor: "+aux.getValor());
+						
+						/* metodo que se reemplaza por el ya disponible en clase GRAFO
+						for(Arista<String> a : listadearistas) {
+							if((a.getInicio().equals(nodo1)) && (a.getFin().equals(nodo2))) {
+								aux = a;
+								System.out.println("La arista seleccionada es la q va de "+a.getInicio()+" a "+a.getFin());
+								System.out.println("con el valor: "+a.getValor());
+							}
+						}
+						*/
+						
+						
+
+						
+						
+						int valor = (int) aux.getValor();
+						if (valor < minimoc) {
+							minimoc = valor;
+						}
+					
+					}
+					
+					
+				}
+					
+				
+			}
+				if (minimoc != 99999) {
+					fmax += minimoc;
+				}
+				System.out.println("El minimo obtenido es: "+minimoc);
+				System.out.println("El flujo maximo es: "+fmax);
+				
+				nodo1 = null; nodo2 = null;
+				//aca se deberia modificar el valor de las aristas restandole el minimo a cada una
+				for (Vertice<String> j : auxi2) {
+					//evaluar si el nodo no es el final
+					if (!(j.equals(this.plantadestino))) {
+						
+						//asignacion de nodos
+						if (nodo1 == null) {
+							nodo1 =j;
+						}
+						else if ((nodo1 != null) && (nodo2 == null)){
+							nodo2 = j;
+
+						}
+						else {
+							nodo1 = nodo2;
+							nodo2 = j;
+						}
+					if (nodo1 != null && nodo2 != null) {
+						
+						//buscar arista en la lista de aristas del grafo
+						//Arista<String> aux = null;
+						System.out.println("Valor de la arista que une "+nodo1+" y "+nodo2+"= "+graf.buscarArista(nodo1, nodo2).getValor());
+						
+						int value = (int) graf.buscarArista(nodo1, nodo2).getValor()-minimoc;
+						graf.buscarArista(nodo1, nodo2).setValor(value);
+						System.out.println("Despues de restarle el minimo: "+graf.buscarArista(nodo1, nodo2).getValor());
+					
+					}
+					
+					
+				}
+					
+				
+			}
+			
+				
+			}
+			System.out.println("El flujo maximo FINAL obtenido es: "+fmax);
+			
+			
+			
 			//OLA KE ASÉ  --- ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			List<List<Vertice<String>>> a = graf.caminos(plantaelegida, this.plantadestino);
 			ArrayList<String> rutaselegidas = new ArrayList<String>();
@@ -584,6 +697,7 @@ public class DetalleItems extends JFrame {
 			//JPanel panelruta = new JPanel();
 			//rutas.setContentPane(panelruta);
 			JButton seleccionar = new JButton("Seleccionar ruta");
+			//Boton que tiene que: insertar la orden y actualizar datos del camion
 
 		
 			
