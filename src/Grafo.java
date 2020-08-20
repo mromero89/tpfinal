@@ -62,7 +62,7 @@ public class Grafo<T> {
 	}
 	
 
-	private List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
+	List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
 		List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
 		for(Arista<T> enlace : this.aristas){
 			if( enlace.getInicio().equals(unNodo)){
@@ -377,6 +377,34 @@ public class Grafo<T> {
 	public List<Arista<T>> getAristas() {
 		return aristas;
 	}
+	
+	public List<Vertice<T>> getVertices() {
+		return vertices;
+	}
+
+	public void impmatriz() {
+    	int cantVertices= this.vertices.size();
+    	int[][] matrizDistancias = new int[cantVertices][cantVertices];
+    	
+    	for(int i=0; i<cantVertices;i++) {
+        	for(int j=0; j<cantVertices;j++) {
+        		if(i== j) {
+            		matrizDistancias[i][j] = 1;        			
+        		}else {
+	        		Arista<T> arista = this.buscarArista(this.vertices.get(i), this.vertices.get(j));
+	        		if(arista!=null) {
+	            		matrizDistancias[i][j] = 1;//arista.getValor().intValue();        			
+	        		} else {
+	            		matrizDistancias[i][j] = 0;        			
+	        		}
+        		}
+        	}    		
+    	}
+    	imprimirMatriz(matrizDistancias);
+    	
+    }
+	
+	
     
     
 }

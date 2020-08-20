@@ -1,5 +1,6 @@
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -114,9 +115,77 @@ public class DetalleItems extends JFrame {
 		graf.conectar(i.getOrigen().getNombre(), i.getDestino().getNombre(), i.getDistanciakm());
 	}
 	
+	
 	//FIN DE CARGA DE GRAFO
 	
+	graf.impmatriz();
 	
+	Grafo<String> graf2 = new Grafo<String>();
+	graf2.addNodo("A");
+	graf2.addNodo("B");
+	graf2.addNodo("C");
+	graf2.conectar("A", "B");
+	graf2.conectar("A", "C");
+	graf2.conectar("B", "C");
+	graf2.conectar("C", "A");
+
+
+
+	
+	
+	//ALGORITMO PAGERANK
+		Map<String, Double> prank = new HashMap<String, Double>();
+		List<Vertice<String>> vertices = graf2.getVertices();
+		List<Vertice<String>> vertices2 = vertices;
+		for (Vertice<String> i : vertices) {
+			System.out.println(i.getValor());
+			
+			prank.put(i.getValor(), (double) 1);
+		}
+		
+		for (int v = 0; v<12 ; v++) {
+		for (Vertice<String> i : vertices) {
+			double suma = 0.0;
+			for(Vertice<String> j : vertices2) {
+				List<Vertice<String>> adyacentes = graf2.getAdyacentes(j);
+				for (Vertice<String> k : adyacentes) {
+					System.out.println("Adyacente a "+j+": "+k.getValor());
+				}
+				if (adyacentes.contains(i)) {
+					System.out.println("el elemento "+j+" es adyacente a "+i);
+					double gradoS = graf2.gradoSalida(j);
+					System.out.println("Grado de salida de "+j+" es "+gradoS);
+					Double prnod = prank.get(j.getValor());
+					suma += prnod / gradoS;
+					//suma += prank.
+				}
+				/*if (adyacentes.contains(i)) {
+					int gradoS = graf.gradoSalida(j);
+					suma += prank.get(j) / gradoS;
+					
+				}*/
+				
+			}
+			double prnodo = 0.5 + 0.5*suma;
+			System.out.println("El PR del nodo "+i.getValor()+" es "+prnodo);
+			prank.put(i.getValor(), prnodo);
+		
+		
+		}
+		
+	}
+		
+	
+	
+	
+	/*
+	Iterator it = pr.keySet().iterator();
+	while(it.hasNext()){
+	  String key = (String) it.next();
+	  System.out.println("Clave: " + key + " -> Valor: " + pr.get(key));
+	}
+	
+	*/
 	//CARGA DE GRAFO DE DURACIONES
 	Grafo<String> grafd = new Grafo<String>();
 	//CArgando el grafo de DISTANCIAS
@@ -320,11 +389,17 @@ public class DetalleItems extends JFrame {
 			info.setText("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			
 			
-			int fmax = 0;
-			System.out.println("ingresando a rutina prototipo para fmax");
-			System.out.println("Planta inicio: "+plantaelegida);
+			
+			/*
+			 * System.out.println("Planta inicio: "+plantaelegida);
 			System.out.println("Planta fin: "+this.plantadestino);
 			List<List<Vertice<String>>> listnodes = graf.caminos(plantaelegida, this.plantadestino);
+			 */
+			int fmax = 0;
+			System.out.println("ingresando a rutina prototipo para fmax");
+			System.out.println("Planta inicio: "+"Buenos Aires");
+			System.out.println("Planta fin: "+"Entre Rios");
+			List<List<Vertice<String>>> listnodes = graf.caminos("Buenos Aires", "Entre Rios");
 			for (List<Vertice<String>> i : listnodes) {
 				int minimoc = 99999;
 				Vertice<String> nodo1, nodo2;
@@ -333,7 +408,8 @@ public class DetalleItems extends JFrame {
 				List<Vertice<String>> auxi2 = auxi;
 				for (Vertice<String> j : auxi) {
 					//evaluar si el nodo no es el final
-					if (!(j.equals(this.plantadestino))) {
+					//if (!(j.equals(this.plantadestino))) {
+					if (!(j.equals("Entre Rios"))) {
 						
 						//asignacion de nodos
 						if (nodo1 == null) {
@@ -373,7 +449,7 @@ public class DetalleItems extends JFrame {
 						
 						
 						int valor = (int) aux.getValor();
-						if (valor < minimoc) {
+						if ((valor < minimoc) && (valor > 0)) {
 							minimoc = valor;
 						}
 					
@@ -394,7 +470,8 @@ public class DetalleItems extends JFrame {
 				//aca se deberia modificar el valor de las aristas restandole el minimo a cada una
 				for (Vertice<String> j : auxi2) {
 					//evaluar si el nodo no es el final
-					if (!(j.equals(this.plantadestino))) {
+					//if (!(j.equals(this.plantadestino))) {
+					if (!(j.equals("Entre Rios"))) {
 						
 						//asignacion de nodos
 						if (nodo1 == null) {
