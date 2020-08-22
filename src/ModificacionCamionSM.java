@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -72,9 +73,13 @@ public class ModificacionCamionSM extends JFrame{
 		modificar.addActionListener(e->{
 			try {
 				dao.AMBCamion.modificarcamion(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText(), clave);
+				JOptionPane.showMessageDialog(null, "Se modificó el registro con éxito", "Información",1);
+
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
+
+				//e1.printStackTrace();
 			}
 			
 		});

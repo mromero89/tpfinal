@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -101,7 +102,7 @@ public class AltaStock extends JFrame {
 		
 		JButton guardar = new JButton("Guardar");
 		JButton limpiar = new JButton("Limpiar");
-		JButton consulta = new JButton("Consulta");
+		//JButton consulta = new JButton("Consulta");
 		
 		limpiar.addActionListener(e-> {
 			campocantidad.setText("");
@@ -158,6 +159,8 @@ public class AltaStock extends JFrame {
 		guardar.addActionListener(e -> {
 			try {
 				dao.ABMStockPlanta.altastock(inicio.getSelectedItem().toString(), insumo.getSelectedItem().toString(), campocantidad.getText(), campopuntopedido.getText());
+				JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
+
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -200,7 +203,7 @@ public class AltaStock extends JFrame {
 		
 		principal.add(guardar);
 		principal.add(limpiar);
-		principal.add(consulta);
+		//principal.add(consulta);
 	
 		
 		

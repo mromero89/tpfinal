@@ -1,24 +1,31 @@
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.MaskFormatter;
 
 import dominio.Camion;
 
 public class BusquedaCamion extends JFrame {
+	
+	
 	JLabel patente = new JLabel("Patente");
 	JLabel modelo = new JLabel("Modelo");
 	JLabel kmrec = new JLabel("KM recorridos");
@@ -27,12 +34,13 @@ public class BusquedaCamion extends JFrame {
 	JLabel fechacompra = new JLabel("Fecha de Compra");
 	JTextArea areatext = new JTextArea();
 	
+	JFormattedTextField fecha;
 	JTextField campopatente = new JTextField(10);
 	JTextField campomodelo = new JTextField(20);
 	JTextField campokm = new JTextField(5);
 	JTextField campocostokm = new JTextField(5);
 	JTextField campocostoh = new JTextField(5);
-	JTextField campofechacompra = new JTextField(10);
+	//JTextField campofechacompra = new JTextField(10);
 	
 	
 	JButton limpiar = new JButton("Limpiar");
@@ -43,7 +51,6 @@ public class BusquedaCamion extends JFrame {
 	JPanel principal = new JPanel();
 	
 	JTable tabla  = new JTable(2,3);
-	//String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
 
 	JScrollPane a = new JScrollPane();
 
@@ -52,13 +59,22 @@ public class BusquedaCamion extends JFrame {
 	public BusquedaCamion(){
 		super("Consulta/Búsqueda/Borrado de Camiones");
 		this.setVisible(true);
-		//this.setLayout();
 		
 		BorderLayout bl = new BorderLayout();
 		
 		this.setLayout(bl);
 		
-		//tabla.addColumn("Nombre");
+		 MaskFormatter mascara = null;
+		try {
+			mascara = new MaskFormatter("####/##/##");
+		} catch (ParseException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		fecha = new JFormattedTextField(mascara);
+		fecha.setPreferredSize(new Dimension(80,20));
+		
+		
 		JPanel subpanel = new JPanel();
 		JPanel subpanelinf = new JPanel();
 		
@@ -73,26 +89,22 @@ public class BusquedaCamion extends JFrame {
 		subpanel.add(costoh);
 		subpanel.add(campocostoh);
 		subpanel.add(fechacompra);
-		subpanel.add(campofechacompra);
+		subpanel.add(fecha);
 		subpanel.add(limpiar);
 		subpanel.add(areatext);
 		subpanel.add(consulta);
 		
 		subpanelinf.add(modificar);
 		subpanelinf.add(borrar);
-		//principal.add(a);
 		
 		this.add(subpanel, BorderLayout.NORTH);
 		this.add(a, BorderLayout.CENTER);
 		
 		
-		//this.setContentPane(principal);
 	
 		
 		modificar.addActionListener(e->{
-			//ejemplo de obtencion de datos de una tabla
 			if (tabla.getSelectedRow() != -1) {
-				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				ModificacionCamionSM smenu = new ModificacionCamionSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 			}
 			
@@ -101,37 +113,8 @@ public class BusquedaCamion extends JFrame {
 		
 		
 		
-		consulta.addActionListener(e->{/*
-			ArrayList<Camion> lista = new ArrayList<Camion>();
-			try {
-				lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			int tamano = lista.size();
-			String [][]aux = new String [tamano][6];
-			int i = 0; int j = 0;
-			for (Camion c : lista) {
-				aux[i][0]=c.getPatente();
-				aux[i][1]=c.getModelo();
-				aux[i][2]=String.valueOf(c.getKmrec());
-				aux[i][3]=String.valueOf(c.getCostokm());
-				aux[i][4]=String.valueOf(c.getCostoh());
-				aux[i][5]=c.getFechacompra();
-				i++;
-				
-				//areatext.append(i.getPatente()+"\n");
-			}
-			
-			String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
-			
-			
-			JTable tablaresu = new JTable(aux, titulos);
-			principal.add(tablaresu);
-			principal.revalidate();*/
+		consulta.addActionListener(e->{
 			this.add(subpanelinf, BorderLayout.SOUTH);
-			
 			consultar();
 			this.revalidate();
 			
@@ -143,12 +126,11 @@ public class BusquedaCamion extends JFrame {
 			campokm.setText("");
 			campocostokm.setText("");
 			campocostoh.setText("");
-			campofechacompra.setText("");
+			fecha.setText("");
 			
 		});
 		
 		borrar.addActionListener(a -> {
-			//ejemplo de obtencion de datos de una tabla
 			if (tabla.getSelectedRow() != -1) {
 				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				try {
@@ -164,52 +146,6 @@ public class BusquedaCamion extends JFrame {
 		});
 		
 		
-		/*Gestion de base de datos
-		try { 
-		    Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-		}
-		
-	
-		Connection connection = null;
-		// Database connect
-		// Conectamos con la base de datos
-		connection = DriverManager.getConnection(
-		        "jdbc:postgresql://localhost:5432/postgres",
-		        "postgres", "wilson222");
-		Statement stn = connection.createStatement();
-		stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-		
-		stn.close();
-		connection.close();
-	
-	FIn de gestion de base de datos
-	*/
-		
-		/*
-		principal.add(patente);
-		principal.add(campopatente);
-		principal.add(modelo);
-		principal.add(campomodelo);
-		principal.add(kmrec);
-		principal.add(campokm);
-		principal.add(costokm);
-		principal.add(campocostokm);
-		principal.add(costoh);
-		principal.add(campocostoh);
-		principal.add(fechacompra);
-		principal.add(campofechacompra);
-		principal.add(limpiar);
-		principal.add(areatext);
-		principal.add(consulta);
-		principal.add(borrar);
-		principal.add(a);*/
-		//principal.add(tabla);
-		
-		
-		
-		
 		this.pack();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -217,8 +153,30 @@ public class BusquedaCamion extends JFrame {
 	
 	private void consultar() {
 		ArrayList<Camion> lista = new ArrayList<Camion>();
+		String paramfecha;
 		try {
-			lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
+			//System.out.println(fecha.getText());
+			
+			if (fecha.getText().equals("    /  /  ")) {
+				paramfecha = "";
+				lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), paramfecha);
+				
+			}
+			else {
+				if (this.validar()) {
+					paramfecha = fecha.getText();
+					lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), paramfecha);
+
+				}
+				else {
+					 JOptionPane.showMessageDialog(null, "Debe colocar la fecha en un formato AAAA/MM/DD", "Error",0);
+
+				}
+				
+
+			}
+			
+			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -235,42 +193,48 @@ public class BusquedaCamion extends JFrame {
 			aux[i][5]=c.getFechacompra();
 			i++;
 			
-			//areatext.append(i.getPatente()+"\n");
 		}
 		
 		
-		//principal.remove(tabla);
-		//principal.revalidate();
-		//pack();
+	
 		String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
 
 
-		JTable tablaresu = new JTable(aux, titulos);
-		//this.remove(tabla);
+		//JTable tablaresu = new JTable(aux, titulos);
 		tabla = new JTable(aux, titulos);
 		
-		//principal.add(tablaresu);
-		//principal.add(tabla);
-		
-		//este anda bien
-		//principal.remove(tabla);
-		//tabla.setVisible(false);
 		this.remove(a);
 
 		a = new JScrollPane(tabla);
-		this.add(a/*new JScrollPane(tabla)*/,BorderLayout.CENTER);
+		this.add(a,BorderLayout.CENTER);
 		
 		
-		//principal.add(tabla);
-		//tabla.repaint();
-		
-		//tabla.repaint();
-
 		this.revalidate();
 		this.repaint();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		
+	}
+	
+	private boolean validar() {
+
+		//comprobacion de fecha
+		   boolean valido = true;
+		 String campo = fecha.getText();
+		
+		 
+		   String[] resul = campo.split("/");
+		   if (Integer.parseInt(resul[1]) < 1 || Integer.parseInt(resul[1]) > 12)
+			   valido = false;
+		   if (Integer.parseInt(resul[2]) < 1 || Integer.parseInt(resul[2]) > 31)
+			   valido = false;
+		   for (int i = 0; i< resul.length; i++) {
+			   System.out.println(resul[i]);
+		   }
+		   System.out.println(valido);
+		   return valido;
+		 
+		   
 	}
 	
 	

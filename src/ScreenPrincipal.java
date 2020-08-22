@@ -44,16 +44,12 @@ public class ScreenPrincipal extends JFrame {
 		
 		//Menu Plantas
 		JMenu plantas = new JMenu("Plantas");
-		JMenuItem aplanta = new JMenuItem("Alta");
-		JMenuItem bplanta = new JMenuItem("Baja");
-		JMenuItem mplanta = new JMenuItem("Modificacion");
+		JMenuItem aplanta = new JMenuItem("Alta/Baja/Consulta de plantas");
 		JMenuItem registrar = new JMenuItem("Registrar Stock");
 		JMenuItem stockinferior = new JMenuItem("Plantas c/ stock menor a punto de pedido");
 
 		
 		plantas.add(aplanta);
-		plantas.add(bplanta);
-		plantas.add(mplanta);
 		plantas.add(registrar);
 		plantas.add(stockinferior);
 		

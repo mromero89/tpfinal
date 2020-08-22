@@ -136,7 +136,7 @@ public class AltaCamion extends JFrame {
 		
 		guardar.addActionListener(e -> {
 			if (validar()) {
-				System.out.println("Todo bien cargado");
+				//System.out.println("Todo bien cargado");
 				try {
 					//dao.AMBCamion.altacamion("abc123", "scania", 12, 1, 6, "2020/12/12");
 					

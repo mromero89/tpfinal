@@ -47,8 +47,11 @@ public class PlantasStockMenor extends JFrame {
 		super("Plantas con stock menor al punto de pedido");
 		this.setVisible(true);
 		
+		BorderLayout bl = new BorderLayout();
+		this.setLayout(bl);
 		
-		this.setContentPane(principal);
+		
+		//this.setContentPane(principal);
 		
 		
 		consulta.addActionListener(e->{
@@ -74,7 +77,10 @@ public class PlantasStockMenor extends JFrame {
 		principal.add(insumo);
 		principal.add(campoinsumo);
 		principal.add(consulta);
-		principal.add(a);
+		
+		this.add(principal, BorderLayout.NORTH);
+		
+		this.add(a, BorderLayout.CENTER);
 	
 		
 		
@@ -187,15 +193,15 @@ public class PlantasStockMenor extends JFrame {
 		
 		
 		//este anda bien
-		principal.remove(a);
+		this.remove(a);
 		a = new JScrollPane(tabla);
 
-		principal.add(a,BorderLayout.CENTER);
+		this.add(a,BorderLayout.CENTER);
 		
 		
 
-		principal.revalidate();
-		principal.repaint();
+		this.revalidate();
+		this.repaint();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		

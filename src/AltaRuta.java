@@ -1,13 +1,17 @@
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -24,6 +28,11 @@ public class AltaRuta extends JFrame {
 		super("Menu Alta Ruta");
 		this.setVisible(true);
 		//this.setLayout();
+		
+
+		BorderLayout bl = new BorderLayout();
+		this.setLayout(bl);
+		
 		
 		//CargarCombos
 		ArrayList<Planta> todas;
@@ -50,20 +59,28 @@ public class AltaRuta extends JFrame {
 		
 		
 	
-		
+		Dimension tamanocampos = new Dimension(50,20);
+
+		/*
+		 JFormattedTextField campokm = new JFormattedTextField(new Integer(0));
+		campokm.setPreferredSize(tamanocampos);*/
 		
 		JLabel distancia = new JLabel("Distancia en KM");
+		JLabel linicio = new JLabel("Inicio");
+		JLabel ldestino = new JLabel("Destino");
 		
-		JTextField campodistancia = new JTextField(10);
+		JFormattedTextField campodistancia = new JFormattedTextField(new Integer(0));
+		campodistancia.setPreferredSize(tamanocampos);
 		
 		JLabel duracion = new JLabel("Duracion horas");
 		
-		JTextField campoduracion = new JTextField(10);
-		
+		JFormattedTextField campoduracion = new JFormattedTextField(new Integer(0));
+		campoduracion.setPreferredSize(tamanocampos);
 		
 		JLabel pesomaximo = new JLabel("Peso Maximo en KG");
 		
-		JTextField campopeso = new JTextField(10);
+		JFormattedTextField campopeso = new JFormattedTextField(new Integer(0));
+		campopeso.setPreferredSize(tamanocampos);
 		
 		JLabel nombre = new JLabel("Nombre Ruta");
 		
@@ -77,7 +94,8 @@ public class AltaRuta extends JFrame {
 		
 		
 		JPanel principal = new JPanel();
-		this.setContentPane(principal);
+		//this.setContentPane(principal);
+		JPanel botonera = new JPanel();
 	
 		
 		
@@ -139,7 +157,15 @@ public class AltaRuta extends JFrame {
 	*/
 		guardar.addActionListener(e -> {
 			try {
+				if (inicio.getSelectedItem().toString().equals(destino.getSelectedItem().toString())){
+					 JOptionPane.showMessageDialog(null, "Las ciudades de inicio y destino deben ser distintas", "Error",0);
+
+		}
+				else {
 				dao.ABMRuta.altaruta(inicio.getSelectedItem().toString(), destino.getSelectedItem().toString(), campodistancia.getText(), campoduracion.getText(), campopeso.getText(), camponombre.getText());
+				JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
+				}
+
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -177,7 +203,9 @@ public class AltaRuta extends JFrame {
 	
 	FIn de gestion de base de datos
 	*/
+		principal.add(linicio);
 		principal.add(inicio);
+		principal.add(ldestino);
 		principal.add(destino);
 		
 		principal.add(distancia);
@@ -189,9 +217,14 @@ public class AltaRuta extends JFrame {
 		principal.add(campopeso);
 		principal.add(nombre);
 		principal.add(camponombre);
-		principal.add(guardar);
-		principal.add(limpiar);
-		principal.add(consulta);
+		
+		this.add(principal, BorderLayout.NORTH);
+		
+		botonera.add(guardar);
+		botonera.add(limpiar);
+		botonera.add(consulta);
+		
+		this.add(botonera, BorderLayout.SOUTH);
 		
 		
 		/*
