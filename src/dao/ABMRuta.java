@@ -34,7 +34,7 @@ public class ABMRuta {
 		        "postgres", "wilson222");
 		Statement stn = connection.createStatement();
 		
-		System.out.println("Palabra sql: "+"INSERT INTO rutas (origen, destino, distancia, duracion, pesomax, nombre) VALUES (\'"+origen+"\', \'"+destino+"\',"+distanciakm+", "+duracionh+", "+pesomax+", \'"+nombre+"\')");
+		//System.out.println("Palabra sql: "+"INSERT INTO rutas (origen, destino, distancia, duracion, pesomax, nombre) VALUES (\'"+origen+"\', \'"+destino+"\',"+distanciakm+", "+duracionh+", "+pesomax+", \'"+nombre+"\')");
 			stn.executeUpdate("INSERT INTO rutas (origen, destino, distancia, duracion, pesomax, nombre) VALUES (\'"+origen+"\', \'"+destino+"\',"+distanciakm+", "+duracionh+", "+pesomax+", \'"+nombre+"\')");
 		
 		

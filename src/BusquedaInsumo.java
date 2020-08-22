@@ -41,6 +41,9 @@ public class BusquedaInsumo extends JFrame {
 	JButton limpiar = new JButton("Limpiar");
 	JButton consulta = new JButton("Consulta");
 	JButton borrar = new JButton("Borrar");
+	JButton modificar = new JButton("Modificar selección");
+	
+	JScrollPane a = new JScrollPane();
 	
 	JPanel principal = new JPanel();
 	
@@ -53,50 +56,18 @@ public class BusquedaInsumo extends JFrame {
 	public BusquedaInsumo(){
 		super("Menu Busqueda Insumos");
 		this.setVisible(true);
-		//this.setLayout();
 		
+		BorderLayout bl = new BorderLayout();
+		this.setLayout(bl);
 		
-		
-		//tabla.addColumn("Nombre");
-		
-		
-		
-		this.setContentPane(principal);
+		//this.setContentPane(principal);
 	
 		
 		
 		
 		
 		
-		consulta.addActionListener(e->{/*
-			ArrayList<Camion> lista = new ArrayList<Camion>();
-			try {
-				lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			int tamano = lista.size();
-			String [][]aux = new String [tamano][6];
-			int i = 0; int j = 0;
-			for (Camion c : lista) {
-				aux[i][0]=c.getPatente();
-				aux[i][1]=c.getModelo();
-				aux[i][2]=String.valueOf(c.getKmrec());
-				aux[i][3]=String.valueOf(c.getCostokm());
-				aux[i][4]=String.valueOf(c.getCostoh());
-				aux[i][5]=c.getFechacompra();
-				i++;
-				
-				//areatext.append(i.getPatente()+"\n");
-			}
-			
-			String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
-			
-			
-			JTable tablaresu = new JTable(aux, titulos);
-			principal.add(tablaresu);
-			principal.revalidate();*/
+		consulta.addActionListener(e->{
 			
 			try {
 				consultar();
@@ -116,11 +87,18 @@ public class BusquedaInsumo extends JFrame {
 			campotipo.setText("");
 			
 			//ejemplo de obtencion de datos de una tabla
+			
+			
+			
+		});
+		
+		modificar.addActionListener(e-> {
+			//ejemplo de obtencion de datos de una tabla
 			if (tabla.getSelectedRow() != -1) {
 				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+				//hay q cambiar esto por modificacioninsumosm
 				ModificacionCamionSM smenu = new ModificacionCamionSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 			}
-			
 			
 		});
 		
@@ -129,7 +107,7 @@ public class BusquedaInsumo extends JFrame {
 			if (tabla.getSelectedRow() != -1) {
 				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				try {
-					dao.AMBCamion.borrarcamion(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+					dao.ABMInsumo.borrar(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -140,28 +118,7 @@ public class BusquedaInsumo extends JFrame {
 		});
 		
 		
-		/*Gestion de base de datos
-		try { 
-		    Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-		}
-		
-	
-		Connection connection = null;
-		// Database connect
-		// Conectamos con la base de datos
-		connection = DriverManager.getConnection(
-		        "jdbc:postgresql://localhost:5432/postgres",
-		        "postgres", "wilson222");
-		Statement stn = connection.createStatement();
-		stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-		
-		stn.close();
-		connection.close();
-	
-	FIn de gestion de base de datos
-	*/
+
 		
 		principal.add(descripcion);
 		principal.add(campodescripcion);
@@ -176,12 +133,14 @@ public class BusquedaInsumo extends JFrame {
 		principal.add(tipo);
 		principal.add(campotipo);
 		principal.add(limpiar);
-		principal.add(areatext);
+		//principal.add(areatext);
 		principal.add(consulta);
 		principal.add(borrar);
+		this.add(modificar, BorderLayout.SOUTH);
 		//principal.add(tabla);
 		
-		
+		this.add(principal, BorderLayout.NORTH);
+		this.add(a, BorderLayout.CENTER);
 		
 		
 		this.pack();
@@ -256,15 +215,17 @@ public class BusquedaInsumo extends JFrame {
 
 
 		JTable tablaresu = new JTable(aux, titulos);
-		this.remove(tabla);
+		this.remove(a);
 		tabla = new JTable(aux, titulos);
 		
 		//principal.add(tablaresu);
 		//principal.add(tabla);
 		
 		//este anda bien
-		principal.remove(tabla);
-		principal.add(new JScrollPane(tabla),BorderLayout.CENTER);
+		//principal.remove(tabla);
+		a = new JScrollPane(tabla);
+
+		this.add(a,BorderLayout.CENTER);
 		
 		
 		//principal.add(tabla);
@@ -272,8 +233,8 @@ public class BusquedaInsumo extends JFrame {
 		
 		//tabla.repaint();
 
-		principal.revalidate();
-		principal.repaint();
+		this.revalidate();
+		this.repaint();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		
