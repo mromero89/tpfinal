@@ -35,6 +35,9 @@ public class PlantasStockMenor extends JFrame {
 	JPanel principal = new JPanel();
 	
 	JTable tabla  = new JTable(2,3);
+	
+	JScrollPane a = new JScrollPane();
+
 	//String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
 
 
@@ -71,6 +74,7 @@ public class PlantasStockMenor extends JFrame {
 		principal.add(insumo);
 		principal.add(campoinsumo);
 		principal.add(consulta);
+		principal.add(a);
 	
 		
 		
@@ -183,8 +187,10 @@ public class PlantasStockMenor extends JFrame {
 		
 		
 		//este anda bien
-		principal.remove(tabla);
-		principal.add(new JScrollPane(tabla),BorderLayout.CENTER);
+		principal.remove(a);
+		a = new JScrollPane(tabla);
+
+		principal.add(a,BorderLayout.CENTER);
 		
 		
 

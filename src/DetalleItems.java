@@ -118,7 +118,7 @@ public class DetalleItems extends JFrame {
 	
 	//FIN DE CARGA DE GRAFO
 	
-	graf.impmatriz();
+	
 	
 	Grafo<String> graf2 = new Grafo<String>();
 	graf2.addNodo("A");
@@ -198,6 +198,11 @@ public class DetalleItems extends JFrame {
 	}
 	//FIN DE CARGA DE GRAFO DURACIONES
 	
+	//caminos minimos: duracion (grafd) y distancia en km (graf)
+	System.out.println("matriz caminos minimos por distancias");
+		graf.floydWarshall();
+		System.out.println("matriz caminos minimos por duracion");
+		grafd.floydWarshall();
 	
 	//public void conectar(T n1,T n2,Number valor)	
 	

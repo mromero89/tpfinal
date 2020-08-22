@@ -45,21 +45,48 @@ public class BusquedaCamion extends JFrame {
 	JTable tabla  = new JTable(2,3);
 	//String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
 
+	JScrollPane a = new JScrollPane();
 
 	
 	
 	public BusquedaCamion(){
-		super("Menu Busqueda Camion");
+		super("Consulta/Búsqueda/Borrado de Camiones");
 		this.setVisible(true);
 		//this.setLayout();
 		
+		BorderLayout bl = new BorderLayout();
 		
+		this.setLayout(bl);
 		
 		//tabla.addColumn("Nombre");
+		JPanel subpanel = new JPanel();
+		JPanel subpanelinf = new JPanel();
+		
+		subpanel.add(patente);
+		subpanel.add(campopatente);
+		subpanel.add(modelo);
+		subpanel.add(campomodelo);
+		subpanel.add(kmrec);
+		subpanel.add(campokm);
+		subpanel.add(costokm);
+		subpanel.add(campocostokm);
+		subpanel.add(costoh);
+		subpanel.add(campocostoh);
+		subpanel.add(fechacompra);
+		subpanel.add(campofechacompra);
+		subpanel.add(limpiar);
+		subpanel.add(areatext);
+		subpanel.add(consulta);
+		
+		subpanelinf.add(modificar);
+		subpanelinf.add(borrar);
+		//principal.add(a);
+		
+		this.add(subpanel, BorderLayout.NORTH);
+		this.add(a, BorderLayout.CENTER);
 		
 		
-		
-		this.setContentPane(principal);
+		//this.setContentPane(principal);
 	
 		
 		modificar.addActionListener(e->{
@@ -103,9 +130,10 @@ public class BusquedaCamion extends JFrame {
 			JTable tablaresu = new JTable(aux, titulos);
 			principal.add(tablaresu);
 			principal.revalidate();*/
-			principal.add(modificar);
+			this.add(subpanelinf, BorderLayout.SOUTH);
+			
 			consultar();
-			principal.revalidate();
+			this.revalidate();
 			
 		});
 		
@@ -131,6 +159,7 @@ public class BusquedaCamion extends JFrame {
 				}
 			}
 			
+			this.consultar();
 			
 		});
 		
@@ -158,6 +187,7 @@ public class BusquedaCamion extends JFrame {
 	FIn de gestion de base de datos
 	*/
 		
+		/*
 		principal.add(patente);
 		principal.add(campopatente);
 		principal.add(modelo);
@@ -174,6 +204,7 @@ public class BusquedaCamion extends JFrame {
 		principal.add(areatext);
 		principal.add(consulta);
 		principal.add(borrar);
+		principal.add(a);*/
 		//principal.add(tabla);
 		
 		
@@ -215,15 +246,19 @@ public class BusquedaCamion extends JFrame {
 
 
 		JTable tablaresu = new JTable(aux, titulos);
-		this.remove(tabla);
+		//this.remove(tabla);
 		tabla = new JTable(aux, titulos);
 		
 		//principal.add(tablaresu);
 		//principal.add(tabla);
 		
 		//este anda bien
-		principal.remove(tabla);
-		principal.add(new JScrollPane(tabla),BorderLayout.CENTER);
+		//principal.remove(tabla);
+		//tabla.setVisible(false);
+		this.remove(a);
+
+		a = new JScrollPane(tabla);
+		this.add(a/*new JScrollPane(tabla)*/,BorderLayout.CENTER);
 		
 		
 		//principal.add(tabla);
@@ -231,8 +266,8 @@ public class BusquedaCamion extends JFrame {
 		
 		//tabla.repaint();
 
-		principal.revalidate();
-		principal.repaint();
+		this.revalidate();
+		this.repaint();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		
