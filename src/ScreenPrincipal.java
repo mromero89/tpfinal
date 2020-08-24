@@ -61,9 +61,9 @@ public class ScreenPrincipal extends JFrame {
 		JMenuItem busquedaruta = new JMenuItem("Busqueda de Rutas");
 		
 		rutas.add(aruta);
-		rutas.add(bruta);
-		rutas.add(mruta);
-		rutas.add(busquedaruta);
+		//rutas.add(bruta);
+		//rutas.add(mruta);
+		//rutas.add(busquedaruta);
 
 
 		
@@ -71,13 +71,10 @@ public class ScreenPrincipal extends JFrame {
 		//Menu Insumos
 		JMenu insumos = new JMenu("Insumos");
 		JMenuItem ainsumo = new JMenuItem("Alta");
-		JMenuItem binsumo = new JMenuItem("Baja");
-		JMenuItem minsumo = new JMenuItem("Modificacion");
-		JMenuItem busquedainsumo = new JMenuItem("Busqueda de Insumos");
+		JMenuItem busquedainsumo = new JMenuItem("Busqueda/Modificacion/Eliminación de Insumos");
 				
 		insumos.add(ainsumo);
-		insumos.add(binsumo);
-		insumos.add(minsumo);
+		
 		insumos.add(busquedainsumo);
 		
 		//Menu ordenes de pedido
@@ -89,11 +86,23 @@ public class ScreenPrincipal extends JFrame {
 		ordenes.add(aorden);
 		ordenes.add(creadas);
 		
+		//Menu Analisis
+		JMenu analisis = new JMenu("Analisis");
+		JMenuItem fmax = new JMenuItem("Flujo maximo");
+		JMenuItem pagerank = new JMenuItem("Page rank");
+		JMenuItem caminominimo = new JMenuItem("Matrices de caminos mínimos");
+		analisis.add(fmax);
+		analisis.add(pagerank);
+		analisis.add(caminominimo);
+		
+		
+		
 		barramenu.add(camiones);
 		barramenu.add(plantas);
 		barramenu.add(rutas);
 		barramenu.add(insumos);
 		barramenu.add(ordenes);
+		barramenu.add(analisis);
 		
 		
 
@@ -151,6 +160,24 @@ public class ScreenPrincipal extends JFrame {
 		
 		aruta.addActionListener(e-> {
 			AltaRuta alta = new AltaRuta();
+		});
+		
+		fmax.addActionListener(e-> {
+			try {
+				new VerFlujoMaximo();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		pagerank.addActionListener(e->{
+			try {
+				new VerPageRank();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		
 		this.pack();

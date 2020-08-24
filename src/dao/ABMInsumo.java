@@ -339,7 +339,7 @@ public static void borrar(String descripcion) throws SQLException  {
 
 public static void modificar(String descripcion, String unidadmedida, String costo, String peso, 
 		String densidad, String tipo) throws SQLException  {
-	/*
+	
 	
 	try { 
 	    Class.forName("org.postgresql.Driver");
@@ -358,9 +358,15 @@ public static void modificar(String descripcion, String unidadmedida, String cos
 	//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
 	
 	//System.out.println("palabra sql: UPDATE camiones SET patente = \'"+patente+"\', modelo = \'"+modelo+"\', kmrec ="+kmrec+", costokm ="+costokm+", costohora="+costohora+", fechacompra= \'"+fecha+"\' WHERE patente = \'"+clave+"\'");
-	
-		stn.executeUpdate("UPDATE camiones SET patente = \'"+patente+"\', modelo = \'"+modelo+"\', kmrec ="+kmrec+", costokm ="+costokm+", costohora="+costohora+", fechacompra= \'"+fecha+"\' WHERE patente = \'"+clave+"\'");
-		clave = patente;
+	if (tipo.equals("GENERAL")){
+		stn.executeUpdate("UPDATE insumos SET descripcion = \'"+descripcion+"\', unidadmedida = \'"+unidadmedida+"\', costo ="+costo+", peso ="+peso+", tipo=\'"+tipo+"\' WHERE descripcion = \'"+descripcion+"\'");
+
+	}
+	else
+	{
+		stn.executeUpdate("UPDATE insumos SET descripcion = \'"+descripcion+"\', unidadmedida = \'"+unidadmedida+"\', costo ="+costo+", densidad ="+densidad+", tipo=\'"+tipo+"\' WHERE descripcion = \'"+descripcion+"\'");
+
+	}
 				//WHERE patente = ... (patente, modelo, kmrec, costokm, costohora, fechacompra) VALUES (\'"+patente+"\', \'"+modelo+"\' , "+kmrec+", "+costokm+", "+costohora+", \'"+fecha+"\')");
 	
 	
@@ -371,7 +377,7 @@ public static void modificar(String descripcion, String unidadmedida, String cos
 		connection.close();
 	
 	
-	*/
+	
 }
 
 }

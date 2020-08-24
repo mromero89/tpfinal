@@ -95,9 +95,9 @@ public class BusquedaInsumo extends JFrame {
 		modificar.addActionListener(e-> {
 			//ejemplo de obtencion de datos de una tabla
 			if (tabla.getSelectedRow() != -1) {
-				System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+				//System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				//hay q cambiar esto por modificacioninsumosm
-				ModificacionCamionSM smenu = new ModificacionCamionSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
+				ModificacionInsumoSM smenu = new ModificacionInsumoSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 			}
 			
 		});

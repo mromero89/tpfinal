@@ -15,20 +15,20 @@ import javax.swing.JTextField;
 import dominio.Camion;
 
 public class ModificacionInsumoSM extends JFrame{
-	JLabel patente = new JLabel("Patente");
-	JLabel modelo = new JLabel("Modelo");
-	JLabel kmrec = new JLabel("KM recorridos");
-	JLabel costokm = new JLabel("Costo por KM");
-	JLabel costoh = new JLabel("Costo por Hora");
-	JLabel fechacompra = new JLabel("Fecha de Compra");
+	JLabel descripcion = new JLabel("Descripcion");
+	JLabel umedida = new JLabel("Unidad de Medida");
+	JLabel costo = new JLabel("Costo");
+	JLabel peso = new JLabel("Peso");
+	JLabel densidad = new JLabel("Densidad");
+	JLabel tipo = new JLabel("Tipo");
 	JTextArea areatext = new JTextArea();
 	
-	JTextField campopatente = new JTextField(10);
-	JTextField campomodelo = new JTextField(20);
-	JTextField campokm = new JTextField(5);
-	JTextField campocostokm = new JTextField(5);
-	JTextField campocostoh = new JTextField(5);
-	JTextField campofechacompra = new JTextField(10);
+	JTextField campodescripcion = new JTextField(10);
+	JTextField campoumedida = new JTextField(20);
+	JTextField campocosto = new JTextField(5);
+	JTextField campopeso = new JTextField(5);
+	JTextField campodensidad = new JTextField(5);
+	JTextField campotipo = new JTextField(10);
 	
 	
 	
@@ -46,15 +46,15 @@ public class ModificacionInsumoSM extends JFrame{
 	
 	public ModificacionInsumoSM(String cpatente, String cmodelo, String ckmrec, String ccostokm, 
 			String ccostohora, String cfecha, String clave){
-		super("Modificar datos de Camion");
+		super("Modificar datos de Insumo");
 		this.setVisible(true);
 		//this.setLayout();
-		this.campopatente.setText(cpatente);
-		this.campomodelo.setText(cmodelo);
-		this.campokm.setText(ckmrec);
-		this.campocostokm.setText(ccostokm);
-		this.campocostoh.setText(ccostohora);
-		this.campofechacompra.setText(cfecha);
+		this.campodescripcion.setText(cpatente);
+		this.campoumedida.setText(cmodelo);
+		this.campocosto.setText(ckmrec);
+		this.campopeso.setText(ccostokm);
+		this.campodensidad.setText(ccostohora);
+		this.campotipo.setText(cfecha);
 		this.clave = clave;
 		
 		
@@ -71,35 +71,44 @@ public class ModificacionInsumoSM extends JFrame{
 		
 		
 		modificar.addActionListener(e->{
-			try {
-				dao.AMBCamion.modificarcamion(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText(), clave);
-				JOptionPane.showMessageDialog(null, "Se modificó el registro con éxito", "Información",1);
+			if (campotipo.getText().equals("GENERAL") || campotipo.getText().equals("LIQUIDO")) {
+				try {
+					dao.ABMInsumo.modificar(campodescripcion.getText(), campoumedida.getText(), campocosto.getText(), campopeso.getText(), campodensidad.getText(), campotipo.getText());
+					JOptionPane.showMessageDialog(null, "Se modificó el registro con éxito", "Información",1);
 
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
 
-				//e1.printStackTrace();
+					//e1.printStackTrace();
+				}
+				
 			}
+			else
+			{
+				 JOptionPane.showMessageDialog(null, "El tipo debe ser GENERAL o LIQUIDO", "Error",0);
+
+			}
+			
 			
 		});
 		
 		
 
 		
-		principal.add(patente);
-		principal.add(campopatente);
-		principal.add(modelo);
-		principal.add(campomodelo);
-		principal.add(kmrec);
-		principal.add(campokm);
-		principal.add(costokm);
-		principal.add(campocostokm);
-		principal.add(costoh);
-		principal.add(campocostoh);
-		principal.add(fechacompra);
-		principal.add(campofechacompra);
-		principal.add(areatext);
+		principal.add(descripcion);
+		principal.add(campodescripcion);
+		principal.add(umedida);
+		principal.add(campoumedida);
+		principal.add(costo);
+		principal.add(campocosto);
+		principal.add(peso);
+		principal.add(campopeso);
+		principal.add(densidad);
+		principal.add(campodensidad);
+		principal.add(tipo);
+		principal.add(campotipo);
+		//principal.add(areatext);
 		principal.add(modificar);
 		
 		
@@ -111,7 +120,7 @@ public class ModificacionInsumoSM extends JFrame{
 	}
 	
 
-	private void consultar() {
+	/*private void consultar() {
 		ArrayList<Camion> lista = new ArrayList<Camion>();
 		try {
 			lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
@@ -163,5 +172,5 @@ public class ModificacionInsumoSM extends JFrame{
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
-}
+}*/
 }

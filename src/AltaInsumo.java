@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -59,8 +60,6 @@ public class AltaInsumo extends JFrame {
 		
 		
 		
-		
-		
 		JTable tabla = new JTable(2,3);
 		//tabla.addColumn("Nombre");
 		
@@ -73,7 +72,17 @@ public class AltaInsumo extends JFrame {
 		
 		JButton guardar = new JButton("Guardar");
 		JButton limpiar = new JButton("Limpiar");
-		JButton consulta = new JButton("Consulta");
+		//JButton consulta = new JButton("Consulta");
+		
+		
+		limpiar.addActionListener(e-> {
+			campodescripcion.setText("");
+			campoumedida.setText("");
+			campocosto.setText("");
+			campopeso.setText("");
+			campodensidad.setText("");
+		});
+		
 		
 		tipoinsumo.addActionListener(e-> {
 			if (tipoinsumo.getSelectedIndex() == 1) {
@@ -84,7 +93,7 @@ public class AltaInsumo extends JFrame {
 				principal.remove(campodensidad);
 				principal.add(guardar);
 				principal.add(limpiar);
-				principal.add(consulta);
+				
 				principal.repaint();
 				principal.revalidate();
 			}
@@ -98,7 +107,6 @@ public class AltaInsumo extends JFrame {
 					principal.remove(campopeso);
 					principal.add(guardar);
 					principal.add(limpiar);
-					principal.add(consulta);
 					principal.repaint();
 					principal.revalidate();
 				}
@@ -155,9 +163,11 @@ public class AltaInsumo extends JFrame {
 				System.out.println("insumo general");
 				try {
 					dao.ABMInsumo.altainsumogeneral(campodescripcion.getText(), campoumedida.getText(), campocosto.getText(), campopeso.getText());
+					JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
+
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
 				}
 			}
 			else
@@ -165,9 +175,10 @@ public class AltaInsumo extends JFrame {
 				{
 					try {
 						dao.ABMInsumo.altainsumoliquido(campodescripcion.getText(), campoumedida.getText(), campocosto.getText(), campodensidad.getText());
+						JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
 					}
 
 

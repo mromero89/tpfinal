@@ -148,7 +148,7 @@ public class AltaCamion extends JFrame {
 				}
 			}
 			else {
-				System.out.println("Falla algo");
+				//System.out.println("Falla algo");
 				 JOptionPane.showMessageDialog(null, "Debe colocar la fecha en un formato AAAA/MM/DD", "Error",0);
 
 			}
