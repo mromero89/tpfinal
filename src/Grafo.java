@@ -275,7 +275,8 @@ public class Grafo<T> {
     	return null;
     }
     
-    public void floydWarshall() {
+    public String floydWarshall() {
+    	String salida = "";
     	int cantVertices= this.vertices.size();
     	int[][] matrizDistancias = new int[cantVertices][cantVertices];
     	
@@ -294,6 +295,7 @@ public class Grafo<T> {
         	}    		
     	}
     	imprimirMatriz(matrizDistancias);
+    	salida = salida +imprimirMatriz(matrizDistancias);
     	
     	for (int k = 0; k < cantVertices; k++) 
         { 
@@ -312,19 +314,27 @@ public class Grafo<T> {
             } 
             System.out.println("MATRIZ "+k);
             imprimirMatriz(matrizDistancias);
+        	salida = salida + "MATRIZ "+k +"\n"+imprimirMatriz(matrizDistancias);
         } 
-    	
+    	return salida;
     }
     
-    public void imprimirMatriz(int[][] m) {
+    public String imprimirMatriz(int[][] m) {
+    	String salida = "";
     	for(int i=0; i<m.length;i++) {
     		System.out.print("[ ");
+    		salida = salida + "[ ";
         	for(int j=0; j<m[i].length;j++) {
         		System.out.print(i+":"+j+" = "+m[i][j]+ ",   ");
+        		
+        		salida = salida + i+":"+j+" = "+m[i][j]+ ",   ";
         	}
         	System.out.println(" ]");
+        	salida = salida + " ]\n";
+        	
     	}
     	
+    	return salida;
     	
 
     }

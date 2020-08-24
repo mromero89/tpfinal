@@ -21,7 +21,7 @@ public class ScreenPrincipal extends JFrame {
 	
 	ScreenPrincipal() {
 		
-		super("Sistema de gestion de plantas");
+		super("Sistema de gestión de logística");
 	
 		
 		this.setVisible(true);
@@ -174,6 +174,15 @@ public class ScreenPrincipal extends JFrame {
 		pagerank.addActionListener(e->{
 			try {
 				new VerPageRank();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		caminominimo.addActionListener(e-> {
+			try {
+				new VerCaminosMinimos();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

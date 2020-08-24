@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import dao.ABMRuta;
@@ -17,19 +19,23 @@ public class VerFlujoMaximo extends JFrame{
 	
 	
 	JComboBox inicio = null, destino = null;
-	JLabel resultado = new JLabel();
 
 	
 	public VerFlujoMaximo() throws SQLException {
 		
+			
 		super("Flujo Máximo");
+		
+		BorderLayout bl = new BorderLayout();
+		
+		this.setLayout(bl);
 		
 		JPanel principal = new JPanel();
 		
 		this.setVisible(true);
 		
 
-		this.setContentPane(principal);
+		//this.setContentPane(principal);
 
 		
 		JLabel einicio = new JLabel("Planta Inicio");
@@ -69,7 +75,7 @@ public class VerFlujoMaximo extends JFrame{
 				principal.add(edestino);
 				principal.add(destino);
 				principal.add(ejecutar);
-				principal.add(resultado);
+				this.add(principal, BorderLayout.NORTH);
 				
 				this.pack();
 		
@@ -218,12 +224,9 @@ public class VerFlujoMaximo extends JFrame{
 			
 		}
 		//System.out.println("El flujo maximo FINAL obtenido es: "+fmax);
-		principal.remove(resultado);
-		resultado = new JLabel("El flujo maximo obtenido es: "+fmax);
-		principal.add(resultado);
-		principal.revalidate();
-		principal.repaint();
+		JOptionPane.showMessageDialog(null, "El flujo máximo entre "+inicio.getSelectedItem().toString()+" y "+destino.getSelectedItem().toString()+" es "+fmax, "Información",1);
 
+		
 		
 	});
 	

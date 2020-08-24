@@ -84,15 +84,10 @@ public class VerPageRank {
 		}
 		
 	}
-		System.out.println("Imprimiendo MAPA");
-		Iterator it = prank.keySet().iterator();
-		while(it.hasNext()){
-		  String key = (String) it.next();
-		  System.out.println("Clave: " + key + " -> Valor: " + prank.get(key));
-		}
 		
 		
-		JFrame v = new JFrame("Prueba JTable");
+		
+		JFrame v = new JFrame("Page Rank de Plantas");
 
 		// Modelo de datos, segunda columna Integer y primera String. Los
 		// índices empiezan en cero.
@@ -138,7 +133,6 @@ public class VerPageRank {
 		v.getContentPane().add(scroll);
 		v.pack();
 		v.setVisible(true);
-		v.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 	
 	}	
