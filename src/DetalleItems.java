@@ -40,6 +40,7 @@ public class DetalleItems extends JFrame {
 	//Se reciben como parametros el nro de pedido y la planta de destino
 	private int nropedido;
 	String plantadestino;
+	Camion camionasig = new Camion();
 	
 	JPanel principal = new JPanel();
 	JPanel sur = new JPanel();
@@ -56,6 +57,8 @@ public class DetalleItems extends JFrame {
 	
 	JLabel plantasci = new JLabel("Plantas con todos los insumos del pedido:");
 	JTextField campoplantasci;
+	
+	
 	
 	private Camion asignarCamion() {
 		//public Camion(String patente, String modelo, int kmrec, int costokm, int costoh, String fechacompra)
@@ -84,10 +87,8 @@ public class DetalleItems extends JFrame {
 
 
   
-        System.out.println("Priority queue values are: " + queue); 
-        for (Camion i : queue) {
-        	System.out.println(i.getPatente());
-        }
+       // System.out.println("Priority queue values are: " + queue); 
+      
 		return queue.poll();
 	}
 	
@@ -104,7 +105,7 @@ public class DetalleItems extends JFrame {
 		this.nropedido = nropedido;
 		this.plantadestino = plantadestino;
 		
-		Camion camionasig = asignarCamion();
+		camionasig = asignarCamion();
 		System.out.println("EL CAMION ASIGNADO ES: "+camionasig.getPatente());
 
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
@@ -136,50 +137,6 @@ public class DetalleItems extends JFrame {
 	graf2.conectar("C", "A");
 
 
-
-	
-	
-	//ALGORITMO PAGERANK
-	/*
-		Map<String, Double> prank = new HashMap<String, Double>();
-		List<Vertice<String>> vertices = graf2.getVertices();
-		List<Vertice<String>> vertices2 = vertices;
-		for (Vertice<String> i : vertices) {
-			System.out.println(i.getValor());
-			
-			prank.put(i.getValor(), (double) 1);
-		}
-		
-		for (int v = 0; v<12 ; v++) {
-		for (Vertice<String> i : vertices) {
-			double suma = 0.0;
-			for(Vertice<String> j : vertices2) {
-				List<Vertice<String>> adyacentes = graf2.getAdyacentes(j);
-				for (Vertice<String> k : adyacentes) {
-					System.out.println("Adyacente a "+j+": "+k.getValor());
-				}
-				if (adyacentes.contains(i)) {
-					System.out.println("el elemento "+j+" es adyacente a "+i);
-					double gradoS = graf2.gradoSalida(j);
-					System.out.println("Grado de salida de "+j+" es "+gradoS);
-					Double prnod = prank.get(j.getValor());
-					suma += prnod / gradoS;
-					//suma += prank.
-				}
-				
-				
-			}
-			double prnodo = 0.5 + 0.5*suma;
-			System.out.println("El PR del nodo "+i.getValor()+" es "+prnodo);
-			prank.put(i.getValor(), prnodo);
-		
-		
-		}
-		
-	}
-	
-	fin de page rank
-	*/	
 	
 	
 	
@@ -200,31 +157,6 @@ public class DetalleItems extends JFrame {
 	
 
 
-	
-	
-	/*
-	int minimo = 99999;
-	String plantaelegida = "";
-	Map<String, Integer> a = graf.caminosMinimoDikstra("Santa Fe");
-	Iterator it = a.keySet().iterator();
-	while(it.hasNext()){
-	  String key = (String) it.next();
-	  if (key.equals("Buenos Aires")) {
-		  if (a.get(key) <= minimo) {
-			  minimo = a.get(key);
-			  plantaelegida = "Santa Fe";
-		  }
-			  
-	  }
-	  //System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
-	}
-	System.out.println("La planta elegida es: "+plantaelegida);
-	
-	graf.caminosMinimoDikstra("Cordoba");
-	graf.caminos("Santa Fe", "Buenos Aires");
-	graf.caminos("Cordoba", "Buenos Aires");
-	*/
-	
 	
 
 		this.setVisible(true);
@@ -380,132 +312,17 @@ public class DetalleItems extends JFrame {
 					}
 			}
 		
-			System.out.println("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
-			System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
+			//System.out.println("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
+			//System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
 			info.setText("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			
 			
 			
-			/*
-			 * System.out.println("Planta inicio: "+plantaelegida);
-			System.out.println("Planta fin: "+this.plantadestino);
-			List<List<Vertice<String>>> listnodes = graf.caminos(plantaelegida, this.plantadestino);
-			 */
-			int fmax = 0;
-			System.out.println("ingresando a rutina prototipo para fmax");
-			System.out.println("Planta inicio: "+"Buenos Aires");
-			System.out.println("Planta fin: "+"Entre Rios");
-			List<List<Vertice<String>>> listnodes = graf.caminos("Buenos Aires", "Entre Rios");
-			for (List<Vertice<String>> i : listnodes) {
-				int minimoc = 99999;
-				Vertice<String> nodo1, nodo2;
-				nodo1 = null; nodo2 = null;
-				List<Vertice<String>> auxi = i;
-				List<Vertice<String>> auxi2 = auxi;
-				for (Vertice<String> j : auxi) {
-					//evaluar si el nodo no es el final
-					//if (!(j.equals(this.plantadestino))) {
-					if (!(j.equals("Entre Rios"))) {
-						
-						//asignacion de nodos
-						if (nodo1 == null) {
-							nodo1 =j;
-						}
-						else if ((nodo1 != null) && (nodo2 == null)){
-							nodo2 = j;
-
-						}
-						else {
-							nodo1 = nodo2;
-							nodo2 = j;
-						}
-					if (nodo1 != null && nodo2 != null) {
-						
-						//buscar arista en la lista de aristas del grafo
-						Arista<String> aux = null;
-						//List<Arista<T>> getAristas()
-						List<Arista<String>> listadearistas = graf.getAristas();
-						
-						aux = graf.buscarArista(nodo1, nodo2);
-						System.out.println("La arista seleccionada es la q va de "+aux.getInicio()+" a "+aux.getFin());
-						System.out.println("con el valor: "+aux.getValor());
-						
-						/* metodo que se reemplaza por el ya disponible en clase GRAFO
-						for(Arista<String> a : listadearistas) {
-							if((a.getInicio().equals(nodo1)) && (a.getFin().equals(nodo2))) {
-								aux = a;
-								System.out.println("La arista seleccionada es la q va de "+a.getInicio()+" a "+a.getFin());
-								System.out.println("con el valor: "+a.getValor());
-							}
-						}
-						*/
-						
-						
-
-						
-						
-						int valor = (int) aux.getValor();
-						if ((valor < minimoc) && (valor > 0)) {
-							minimoc = valor;
-						}
-					
-					}
-					
-					
-				}
-					
-				
-			}
-				if (minimoc != 99999) {
-					fmax += minimoc;
-				}
-				System.out.println("El minimo obtenido es: "+minimoc);
-				System.out.println("El flujo maximo es: "+fmax);
-				
-				nodo1 = null; nodo2 = null;
-				//aca se deberia modificar el valor de las aristas restandole el minimo a cada una
-				for (Vertice<String> j : auxi2) {
-					//evaluar si el nodo no es el final
-					//if (!(j.equals(this.plantadestino))) {
-					if (!(j.equals("Entre Rios"))) {
-						
-						//asignacion de nodos
-						if (nodo1 == null) {
-							nodo1 =j;
-						}
-						else if ((nodo1 != null) && (nodo2 == null)){
-							nodo2 = j;
-
-						}
-						else {
-							nodo1 = nodo2;
-							nodo2 = j;
-						}
-					if (nodo1 != null && nodo2 != null) {
-						
-						//buscar arista en la lista de aristas del grafo
-						//Arista<String> aux = null;
-						System.out.println("Valor de la arista que une "+nodo1+" y "+nodo2+"= "+graf.buscarArista(nodo1, nodo2).getValor());
-						
-						int value = (int) graf.buscarArista(nodo1, nodo2).getValor()-minimoc;
-						graf.buscarArista(nodo1, nodo2).setValor(value);
-						System.out.println("Despues de restarle el minimo: "+graf.buscarArista(nodo1, nodo2).getValor());
-					
-					}
-					
-					
-				}
-					
-				
-			}
-			
-				
-			}
-			System.out.println("El flujo maximo FINAL obtenido es: "+fmax);
 			
 			
 			
-			//OLA KE ASÉ  --- ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
+			
+			//ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			List<List<Vertice<String>>> a = graf.caminos(plantaelegida, this.plantadestino);
 			ArrayList<String> rutaselegidas = new ArrayList<String>();
 			for (List<Vertice<String>> q : a) {
@@ -560,10 +377,12 @@ public class DetalleItems extends JFrame {
 			
 			
 			tablarutas = new JTable(auxtabla, titulos);
+			
+			/*
 
 			JFrame rutas = new JFrame("Rutas ");
 			rutas.add(tablarutas);
-			rutas.setVisible(true);
+			rutas.setVisible(true);*/
 			
 
 		}
@@ -576,6 +395,9 @@ public class DetalleItems extends JFrame {
 		JButton rutamasrapida = new JButton("Ruta mas rapida");
 		
 		
+		//EVENTOS de los botones
+		
+		//RUTA MAS CORTA EN KM
 		agregar.addActionListener(e->{
 			int minimo = 99999;
 			String plantaelegida = "";
@@ -663,7 +485,9 @@ public class DetalleItems extends JFrame {
 			
 			
 			JTable tablarutas = new JTable(auxtabla, titulos);
-
+			
+			SeleccionarRuta s = new SeleccionarRuta(tablarutas, "Rutas mas cortas en DISTANCIA", camionasig, this.nropedido);
+/*
 			JFrame rutas = new JFrame("Ruta mas corta en KM");
 			JButton seleccionar = new JButton("Seleccionar ruta");
 			JPanel panel = new JPanel();
@@ -672,12 +496,19 @@ public class DetalleItems extends JFrame {
 			panel.add(tablarutas);
 			panel.add(seleccionar);
 			
+			seleccionar.addActionListener(f->{
+				//new SeleccionarRuta(tablarutas);
+				
+			});
+			
 			rutas.setVisible(true);
 			
-			
+			*/
 			
 		});
 		
+		
+		//RUTA MAS RAPIDA
 		rutamasrapida.addActionListener(e->{
 			int minimo = 99999;
 			String plantaelegida = "";
@@ -766,6 +597,9 @@ public class DetalleItems extends JFrame {
 			
 			JTable tablarutas = new JTable(auxtabla, titulos);
 
+			SeleccionarRuta s = new SeleccionarRuta(tablarutas, "Rutas mas cortas en DURACIÓN", camionasig, this.nropedido);
+
+			/*
 			JFrame rutas = new JFrame("Ruta mas corta en duracion");
 			//JPanel panelruta = new JPanel();
 			//rutas.setContentPane(panelruta);
@@ -781,7 +615,7 @@ public class DetalleItems extends JFrame {
 			panel.add(seleccionar);
 			rutas.setVisible(true);
 
-			
+			*/
 			
 		});
 		
@@ -805,9 +639,12 @@ public class DetalleItems extends JFrame {
 	
 	
 	
+	//Crea la tabla con los elementos del pedido
 	private void consultar() {
+		
+		//CONSULTA SQL
 		try {
-			//lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
+			
 			
 			try { 
 			    Class.forName("org.postgresql.Driver");
@@ -843,9 +680,6 @@ public class DetalleItems extends JFrame {
 				
 				lista.add(aux);
 			}
-			//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-			
-			
 			
 			
 				stn.close();
@@ -857,6 +691,9 @@ public class DetalleItems extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		
+		
 		int tamano = lista.size();
 		String [][]aux = new String [tamano][3];
 		int i = 0; int j = 0;

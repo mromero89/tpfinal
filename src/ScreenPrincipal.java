@@ -81,10 +81,12 @@ public class ScreenPrincipal extends JFrame {
 		JMenu ordenes = new JMenu("Ordenes de pedido");
 		JMenuItem aorden = new JMenuItem("Alta");
 		JMenuItem creadas = new JMenuItem("Ver ordenes CREADAS");
+		JMenuItem procesadas = new JMenuItem("Ver ordenes PROCESADAS");
 		
 		
 		ordenes.add(aorden);
 		ordenes.add(creadas);
+		ordenes.add(procesadas);
 		
 		//Menu Analisis
 		JMenu analisis = new JMenu("Analisis");
@@ -115,6 +117,15 @@ public class ScreenPrincipal extends JFrame {
 		creadas.addActionListener(e-> {
 			try {
 				VerOrdenesCreadas ver = new VerOrdenesCreadas();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		procesadas.addActionListener(e->{
+			try {
+				new VerOrdenesProcesadas();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

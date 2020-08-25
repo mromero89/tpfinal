@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,7 +27,7 @@ import dominio.OrdenPedido;
 import dominio.Planta;
 import dominio.Ruta;
 
-public class VerOrdenesCreadas extends JFrame {
+public class VerOrdenesProcesadas extends JFrame {
 	
 	JPanel principal = new JPanel();
 	
@@ -34,11 +35,11 @@ public class VerOrdenesCreadas extends JFrame {
 	
 	
 	
-	VerOrdenesCreadas() throws SQLException{
+	VerOrdenesProcesadas() throws SQLException{
 		
 		
 		
-		super("Ver ordenes creadas");
+		super("Ver ordenes procesadas");
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
 		ArrayList<Ruta> listarutas = ABMRuta.todos();
@@ -53,18 +54,50 @@ public class VerOrdenesCreadas extends JFrame {
 		
 		this.consultar();
 		
-		JButton agregar = new JButton("Detalle de items");
+		JButton agregar = new JButton("Marcar como Entregada");
 		
 		agregar.addActionListener(e->{
-			try {
-				DetalleItems alta = new DetalleItems(Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()), this.tabla.getValueAt(tabla.getSelectedRow(), 2).toString());
-				//System.out.println(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-				//Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0))
-				
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		try {	
+			try { 
+			    Class.forName("org.postgresql.Driver");
+			} catch (ClassNotFoundException ex) {
+			    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
 			}
+			
+
+			Connection connection = null;
+			// Database connect
+			// Conectamos con la base de datos
+			
+				connection = DriverManager.getConnection(
+				        "jdbc:postgresql://localhost:5432/postgres",
+				        "postgres", "wilson222");
+			
+			Statement stn;
+			
+				stn = connection.createStatement();
+			
+			
+				stn.executeUpdate("UPDATE ordenespedidos SET estado = \'ENTREGADA\' WHERE nropedido = "+Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()));
+			
+			
+				
+					stn.close();
+				
+			
+			
+				
+					connection.close();
+					JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
+
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+				
+			
+	
 		});
 		
 	
@@ -96,7 +129,7 @@ public class VerOrdenesCreadas extends JFrame {
 			connection = DriverManager.getConnection(
 			        "jdbc:postgresql://localhost:5432/postgres",
 			        "postgres", "wilson222");
-			PreparedStatement stn = connection.prepareStatement("SELECT * FROM ordenespedidos WHERE estado = \'CREADA\' ");
+			PreparedStatement stn = connection.prepareStatement("SELECT * FROM ordenespedidos WHERE estado = \'PROCESADA\' ");
 			ResultSet rs = stn.executeQuery();
 			while(rs.next()) {
 				//Camion(String patente, String modelo, int kmrec, int costokm, int costoh, String fechacompra)
