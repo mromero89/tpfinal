@@ -42,6 +42,7 @@ public class DetalleItems extends JFrame {
 	String plantadestino;
 	
 	JPanel principal = new JPanel();
+	JPanel sur = new JPanel();
 	JTable tablarutas;
 	
 	//LISTA CON TODOS LOS ITEMS DEL NUMERO DE PEDIDO DADO, SE CARGA CON THIS.CONSULTA()	
@@ -91,10 +92,15 @@ public class DetalleItems extends JFrame {
 	}
 	
 	
+	//CONSTRUCTOR
 	DetalleItems(int nropedido, String plantadestino) throws SQLException{
 		
 		
 		super("Detalle items de la orden "+nropedido);
+		
+		BorderLayout bl = new BorderLayout();
+		this.setLayout(bl);
+		
 		this.nropedido = nropedido;
 		this.plantadestino = plantadestino;
 		
@@ -134,6 +140,7 @@ public class DetalleItems extends JFrame {
 	
 	
 	//ALGORITMO PAGERANK
+	/*
 		Map<String, Double> prank = new HashMap<String, Double>();
 		List<Vertice<String>> vertices = graf2.getVertices();
 		List<Vertice<String>> vertices2 = vertices;
@@ -159,11 +166,7 @@ public class DetalleItems extends JFrame {
 					suma += prnod / gradoS;
 					//suma += prank.
 				}
-				/*if (adyacentes.contains(i)) {
-					int gradoS = graf.gradoSalida(j);
-					suma += prank.get(j) / gradoS;
-					
-				}*/
+				
 				
 			}
 			double prnodo = 0.5 + 0.5*suma;
@@ -174,18 +177,15 @@ public class DetalleItems extends JFrame {
 		}
 		
 	}
-		
+	
+	fin de page rank
+	*/	
 	
 	
 	
-	/*
-	Iterator it = pr.keySet().iterator();
-	while(it.hasNext()){
-	  String key = (String) it.next();
-	  System.out.println("Clave: " + key + " -> Valor: " + pr.get(key));
-	}
 	
-	*/
+	
+	
 	//CARGA DE GRAFO DE DURACIONES
 	Grafo<String> grafd = new Grafo<String>();
 	//CArgando el grafo de DISTANCIAS
@@ -198,20 +198,9 @@ public class DetalleItems extends JFrame {
 	}
 	//FIN DE CARGA DE GRAFO DURACIONES
 	
-	//caminos minimos: duracion (grafd) y distancia en km (graf)
-	System.out.println("matriz caminos minimos por distancias");
-		graf.floydWarshall();
-		System.out.println("matriz caminos minimos por duracion");
-		grafd.floydWarshall();
-	
-	//public void conectar(T n1,T n2,Number valor)	
-	
-	
-	//public Map<T,Integer> caminosMinimoDikstra(T valorOrigen){
+
 
 	
-	
-	/*ESTO ES UNA GENIALIDAD*/
 	
 	/*
 	int minimo = 99999;
@@ -236,13 +225,12 @@ public class DetalleItems extends JFrame {
 	graf.caminos("Cordoba", "Buenos Aires");
 	*/
 	
-	/*HASTA ACA LA GENIALIDAD*/
 	
 
 		this.setVisible(true);
 		
 
-		this.setContentPane(principal);
+		//this.setContentPane(principal);
 	
 		
 		this.consultar();
@@ -360,13 +348,16 @@ public class DetalleItems extends JFrame {
 			}
 			String titles[] = {"Plantas"};
 			tabla2 = new JTable(auxiliar, titles);
-			principal.add(plantasci);
+			sur.add(plantasci);
+			//JScrollPane pane = new JScrollPane();
+			sur.add(tabla2);
 
-			principal.add(tabla2);
-			campoplantasci = new JTextField(plantascontodos);
-			principal.add(campoplantasci);
+			this.add(sur, BorderLayout.SOUTH);
+
+			//campoplantasci = new JTextField(plantascontodos);
+			//principal.add(campoplantasci);
 			principal.revalidate();
-			
+			this.add(principal, BorderLayout.CENTER);
 			
 			//SE ELIGE LA PLANTA CON EL CAMINO MAS CORTO
 			int minimo = 99999;
@@ -803,13 +794,10 @@ public class DetalleItems extends JFrame {
 		//principal.add(campofechamaxima);
 		//principal.add(numeropedido);
 		//principal.add(camponumeropedido);
-		principal.add(info);
-		principal.add(agregar);
-		principal.add(rutamasrapida);
+		sur.add(agregar);
+		sur.add(rutamasrapida);
+		sur.add(info);
 
-		
-	
-		
 		
 		
 		this.pack();

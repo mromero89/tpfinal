@@ -83,7 +83,7 @@ public class AltaOrdenPedido extends JFrame {
 		campofechamaxima.setPreferredSize(new Dimension(80,20));
 		
 		JLabel numeropedido = new JLabel("Numero de pedido");
-		JFormattedTextField camponumeropedido = new JFormattedTextField(new Integer(0));
+		JTextField camponumeropedido = new JTextField();
 		camponumeropedido.setPreferredSize(new Dimension(80,20));
 		
 		
@@ -145,11 +145,14 @@ public class AltaOrdenPedido extends JFrame {
 					
 					stn.close();
 					connection.close();
-					
+					JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
+
 					
 
 				} catch (SQLException e2) {
 					// TODO Auto-generated catch block
+					 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
+
 					e2.printStackTrace();
 				}
 				//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");

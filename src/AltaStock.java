@@ -1,11 +1,13 @@
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -73,12 +75,13 @@ public class AltaStock extends JFrame {
 		
 		JLabel cantidadinsumo = new JLabel("Cantidad de insumo");
 		
-		JTextField campocantidad = new JTextField(10);
+		JFormattedTextField campocantidad = new JFormattedTextField(new Integer(0));
+		campocantidad.setPreferredSize(new Dimension(50,20));
 		
 		JLabel puntopedido = new JLabel("Punto de pedido");
 		
-		JTextField campopuntopedido = new JTextField(10);
-		
+		JFormattedTextField campopuntopedido = new JFormattedTextField(new Integer(0));
+		campopuntopedido.setPreferredSize(new Dimension(50,20));
 		
 		JLabel pesomaximo = new JLabel("Peso Maximo en KG");
 		

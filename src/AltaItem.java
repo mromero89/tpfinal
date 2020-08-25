@@ -1,5 +1,6 @@
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.awt.BorderLayout;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -35,8 +36,13 @@ public class AltaItem extends JFrame {
 	AltaItem(){
 		super("Agregar Item a la orden de pedido");
 		this.setVisible(true);
+		
+		BorderLayout bl = new BorderLayout();
+		this.setLayout(bl);
+
 		//this.setLayout();
 		JPanel principal = new JPanel();
+		JPanel sur = new JPanel();
 
 		//CargarCombos
 		
@@ -80,7 +86,7 @@ public class AltaItem extends JFrame {
 		
 		
 		
-		this.setContentPane(principal);
+		//this.setContentPane(principal);
 	
 		
 		
@@ -103,9 +109,10 @@ public class AltaItem extends JFrame {
 					costoitem = i.getCosto() * Integer.parseInt(campocantidad.getText());
 				}
 				campocosto.setText(String.valueOf(costoitem));
-				principal.add(costo);
-				principal.add(campocosto);
-				principal.add(guardar);
+				sur.add(costo);
+				sur.add(campocosto);
+				sur.add(guardar);
+				this.repaint();
 				principal.revalidate();
 				
 			}
@@ -201,6 +208,11 @@ public class AltaItem extends JFrame {
 		principal.add(cantidad);
 		principal.add(campocantidad);
 		principal.add(calcularcosto);
+		sur.add(costo);
+		sur.add(campocosto);
+		
+		this.add(principal, BorderLayout.NORTH);
+		this.add(sur, BorderLayout.SOUTH);
 		
 		
 		
