@@ -8,13 +8,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import dao.ABMDetalleEnvio;
+import dao.ABMOrdenPedido;
 import dao.ABMRuta;
+import dao.AMBCamion;
 import dao.AMBPlanta;
 import dominio.Camion;
 import dominio.Planta;
 import dominio.Ruta;
 
 public class SeleccionarRuta extends JFrame{
+	int costo = 0;
 	
 	public SeleccionarRuta(JTable tabla, String nombre, Camion camion, int nropedido) {
 		super(nombre);
@@ -30,6 +34,7 @@ public class SeleccionarRuta extends JFrame{
 		this.add(seleccionar, BorderLayout.SOUTH);
 		pack();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		System.out.println("Camion asignado es:" + camion.getPatente());
 		
 		
 
@@ -62,7 +67,6 @@ public class SeleccionarRuta extends JFrame{
 				
 				
 			
-			
 			System.out.println(listaSalida[i]);
 			
 		}
@@ -79,15 +83,48 @@ public class SeleccionarRuta extends JFrame{
 			System.out.println("Planta fin: "+plantafin);
 			
 			try {
-				int costo = costo(camion, listaSalida);
+				costo = costo(camion, listaSalida);
 				System.out.println("El costo total es de "+costo);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
+			int kilometros;
+			String km = "";
+			try {
+				kilometros = distancia(camion, listaSalida) + camion.getKmrec();
+				km = String.valueOf(kilometros);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			
+			/*public static void modificarcamion(String patente, String modelo, String kmrec, String costokm, 
+			String costohora, String fecha, String clave)*/
+				
+			try {
+				AMBCamion.modificarcamion(camion.getPatente(), camion.getModelo(), km, String.valueOf(camion.getCostokm()), String.valueOf(camion.getCostoh()), camion.getFechacompra(), camion.getPatente());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				ABMDetalleEnvio.alta(String.valueOf(nropedido), camion.getPatente(), tablarutas.getValueAt(tabla.getSelectedRow(), 0).toString(), String.valueOf(costo));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			try {
+				ABMOrdenPedido.modificar(String.valueOf(nropedido), plantainicio, "PROCESADA");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			
 		});
@@ -153,6 +190,43 @@ public class SeleccionarRuta extends JFrame{
 		c = camion.getCostokm()*distancia+camion.getCostoh()*duracion;
 		
 		return c;
+	}
+	
+	private int distancia(Camion camion, String[] ruta) throws SQLException {
+		//CARGAR LOS GRAFOS
+		
+		// CARGA DE GRAFO DE DISTANCIA
+				ArrayList<Planta> listaplantas = AMBPlanta.todos();
+				ArrayList<Ruta> listarutas = ABMRuta.todos();
+				
+
+			Grafo<String> graf = new Grafo<String>();
+			//CArgando el grafo de DISTANCIAS
+			for (Planta i : listaplantas) {
+				graf.addNodo(i.getNombre());
+			}
+			
+			for (Ruta i : listarutas) {
+				graf.conectar(i.getOrigen().getNombre(), i.getDestino().getNombre(), i.getDistanciakm());
+			}
+			
+			//FIN CARGA GRAFO DISTANCIA
+			
+			
+		
+				int distancia = 0;
+				for (int i = 0; i<ruta.length; i++) {
+					if (i<(ruta.length-1)) {
+						
+						
+						Arista<String> b = graf.buscarArista(ruta[i], ruta[i+1]);
+						int valor2 = (int) b.getValor();
+						distancia += valor2;
+					}
+				}
+		
+		
+		return distancia;
 	}
 	
 
