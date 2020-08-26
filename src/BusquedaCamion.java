@@ -40,7 +40,6 @@ public class BusquedaCamion extends JFrame {
 	JTextField campokm = new JTextField(5);
 	JTextField campocostokm = new JTextField(5);
 	JTextField campocostoh = new JTextField(5);
-	//JTextField campofechacompra = new JTextField(10);
 	
 	
 	JButton limpiar = new JButton("Limpiar");
@@ -155,7 +154,6 @@ public class BusquedaCamion extends JFrame {
 		ArrayList<Camion> lista = new ArrayList<Camion>();
 		String paramfecha;
 		try {
-			//System.out.println(fecha.getText());
 			
 			if (fecha.getText().equals("    /  /  ")) {
 				paramfecha = "";
@@ -200,7 +198,6 @@ public class BusquedaCamion extends JFrame {
 		String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
 
 
-		//JTable tablaresu = new JTable(aux, titulos);
 		tabla = new JTable(aux, titulos);
 		
 		this.remove(a);

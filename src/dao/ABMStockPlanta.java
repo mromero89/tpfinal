@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import dominio.Camion;
 import dominio.Insumo;
+import dominio.InsumosPlantas;
+import dominio.ItemPedido;
 import dominio.Planta;
 import dominio.Ruta;
 
@@ -114,6 +116,81 @@ public static ArrayList<Insumo> todos() throws SQLException  {
 		
 		
 	}
+
+
+public static void consultarstockmenor(ArrayList<InsumosPlantas> lista, String campoplanta, String campoinsumo) throws SQLException {
+	try { 
+	    Class.forName("org.postgresql.Driver");
+	} catch (ClassNotFoundException ex) {
+	    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+	}
+	
+
+	Connection connection = null;
+	// Database connect
+	// Conectamos con la base de datos
+	connection = DriverManager.getConnection(
+	        "jdbc:postgresql://localhost:5432/postgres",
+	        "postgres", "wilson222");
+	String consulta = "SELECT * FROM insumosplantas WHERE cantidad < puntopedido";
+
+	if (!campoplanta.equals(""))
+		consulta = consulta + " AND nombreplanta = \'"+campoplanta+"\'";
+	
+	if (!campoinsumo.equals(""))
+		consulta = consulta + " AND insumo = \'"+campoinsumo+"\'";
+	
+	
+	PreparedStatement stn = connection.prepareStatement(consulta);
+	ResultSet rs = stn.executeQuery();
+	
+	while(rs.next()) {
+		InsumosPlantas aux = new InsumosPlantas();
+		aux.setInsumo(rs.getString(1));
+		aux.setCantidad(rs.getInt(2));
+		aux.setPuntopedido(rs.getInt(3));
+		aux.setNombreplanta(rs.getString(4));
+		lista.add(aux);
+	
+	}
+	
+	stn.close();
+	connection.close();
+	
+	
+	 /*fin consulta sql
+	
+	 */
+}
+
+public static void consultaplantastock(ArrayList<Planta> rsconsulta, ItemPedido j, Planta i) throws SQLException {
+	//consulta SQL 
+	
+	 try { 
+		 Class.forName("org.postgresql.Driver");
+		 } catch (ClassNotFoundException ex) {
+			 System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+			 }
+	 
+	 Connection connection = null;
+	 connection = DriverManager.getConnection(
+   "jdbc:postgresql://localhost:5432/postgres",
+   "postgres", "wilson222");
+	 
+	 String consulta = "SELECT * FROM insumosplantas WHERE insumo = \'"+j.getInsumo()+"\' AND cantidad >="+j.getCantidad()+" AND nombreplanta = \'"+i.getNombre()+"\'";
+	 PreparedStatement stn = connection.prepareStatement(consulta);
+	 ResultSet rs = stn.executeQuery();
+	 while(rs.next()) { 
+	 Planta aux = new Planta();
+	 aux.setNombre(rs.getString("nombreplanta"));
+	 rsconsulta.add(aux);
+	 }
+	 stn.close();
+	 connection.close();
+	 /*FIn consulta SQL */
+}
+
+
 	
 
 }

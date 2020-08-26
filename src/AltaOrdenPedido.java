@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
+import dao.ABMOrdenPedido;
 import dominio.Camion;
 import dominio.ItemPedido;
 import dominio.Planta;
@@ -110,103 +111,19 @@ public class AltaOrdenPedido extends JFrame {
 		
 		guardar.addActionListener(e -> {
 			if (this.validar()) {
-				try { 
-				    Class.forName("org.postgresql.Driver");
-				} catch (ClassNotFoundException ex) {
-				    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-				}
 				
 
-				Connection connection = null;
-				// Database connect
-				// Conectamos con la base de datos
-				try {
-					connection = DriverManager.getConnection(
-					        "jdbc:postgresql://localhost:5432/postgres",
-					        "postgres", "wilson222");
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				Statement stn;
-				try {
-					stn = connection.createStatement();
-					String palabra1 = "Sentencia 1: INSERT INTO ordenespedidos (nropedido, plantadestino, fechaentrega, estado) VALUES ("+camponumeropedido.getText()+", \'"+destino.getSelectedItem().toString()+"\', \'"+campofechamaxima.getText()+"\', \'CREADA\'";
-					System.out.println(palabra1);
-					stn.executeUpdate("INSERT INTO ordenespedidos (nropedido, plantadestino, fechaentrega, estado) VALUES ("+camponumeropedido.getText()+", \'"+destino.getSelectedItem().toString()+"\', \'"+campofechamaxima.getText()+"\', \'CREADA\')");
-					
-					for (ItemPedido i : items) {
-						stn = connection.createStatement();
-						String palabra2 = "Sentencia2: "+"INSERT INTO itemspedidos (nropedido, item, cantidad, costo) VALUES ("+camponumeropedido.getText()+", \'"+i.getInsumo()+"\' , "+i.getCantidad()+", "+i.getCosto()+")";
-						System.out.println(palabra2);
-						stn.executeUpdate("INSERT INTO itemspedidos (nropedido, item, cantidad, costo) VALUES ("+camponumeropedido.getText()+", \'"+i.getInsumo()+"\' , "+i.getCantidad()+", "+i.getCosto()+")");
-						
-					}
-					
-					stn.close();
-					connection.close();
-					JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
-
-					
-
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					 JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar grabar los datos. Verifique que todos los campos esten completos y en el formato que corresponde", "Error",0);
-
-					e2.printStackTrace();
-				}
-				//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-				
+				ABMOrdenPedido.guardarordenpedido(camponumeropedido.getText(), destino.getSelectedItem().toString(), campofechamaxima.getText(), items);
 				
 			
 				
-				/*
-				try {
-					dao.ABMRuta.altaruta(inicio.getSelectedItem().toString(), destino.getSelectedItem().toString(), campodistancia.getText(), campoduracion.getText(), campopeso.getText(), camponombre.getText());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				/*
-				try {
-					//dao.AMBCamion.altacamion("abc123", "scania", 12, 1, 6, "2020/12/12");
-					dao.AMBPlanta.altaplanta(camponombre.getText());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				
-				//dao.AMBCamion.altacamion(patente.getText(), modelo.getText(), Integer.parseInt(kmrec.getText()), Integer.parseInt(costokm.getText()), Integer.parseInt(costohora.getText()), fechacompra.getText());
-			
 			}
 			else {
 				 JOptionPane.showMessageDialog(null, "Debe colocar la fecha en un formato AAAA/MM/DD", "Error",0);
 
 			}
 			});
-		/*Gestion de base de datos
-		try { 
-		    Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-		}
 		
-	
-		Connection connection = null;
-		// Database connect
-		// Conectamos con la base de datos
-		connection = DriverManager.getConnection(
-		        "jdbc:postgresql://localhost:5432/postgres",
-		        "postgres", "wilson222");
-		Statement stn = connection.createStatement();
-		stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-		
-		stn.close();
-		connection.close();
-	
-	FIn de gestion de base de datos
-	*/
-		//principal.add(inicio);
 		principal.add(destino);
 		
 		principal.add(fechamaxima);
@@ -218,19 +135,6 @@ public class AltaOrdenPedido extends JFrame {
 		
 		
 		
-		/*
-		 * 	JLabel distancia = new JLabel("Distancia en KM");
-		
-		JTextField campodistancia = new JTextField(10);
-		
-		JLabel duracion = new JLabel("Duracion horas");
-		
-		JTextField campoduracion = new JTextField(10);
-		
-		
-		JLabel pesomaximo = new JLabel("Peso Maximo en KG");
-		
-		JTextField campopeso = new JTextField(10);*/
 		
 		
 		

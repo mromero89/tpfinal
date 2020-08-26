@@ -17,6 +17,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import dao.ABMOrdenPedido;
 import dao.ABMRuta;
 import dao.AMBPlanta;
 import dominio.Camion;
@@ -39,7 +40,6 @@ public class VerOrdenesCreadas extends JFrame {
 		
 		
 		super("Ver ordenes creadas");
-		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
 		ArrayList<Ruta> listarutas = ABMRuta.todos();
 
@@ -58,8 +58,7 @@ public class VerOrdenesCreadas extends JFrame {
 		agregar.addActionListener(e->{
 			try {
 				DetalleItems alta = new DetalleItems(Integer.valueOf(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString()), this.tabla.getValueAt(tabla.getSelectedRow(), 2).toString());
-				//System.out.println(this.tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-				//Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0))
+				
 				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -81,56 +80,10 @@ public class VerOrdenesCreadas extends JFrame {
 	
 	private void consultar() {
 		ArrayList<OrdenPedido> lista = new ArrayList<OrdenPedido>();
-		try {
-			//lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
-			
-			try { 
-			    Class.forName("org.postgresql.Driver");
-			} catch (ClassNotFoundException ex) {
-			    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-			}
-			
-			Connection connection = null;
-			// Database connect
-			// Conectamos con la base de datos
-			connection = DriverManager.getConnection(
-			        "jdbc:postgresql://localhost:5432/postgres",
-			        "postgres", "wilson222");
-			PreparedStatement stn = connection.prepareStatement("SELECT * FROM ordenespedidos WHERE estado = \'CREADA\' ");
-			ResultSet rs = stn.executeQuery();
-			while(rs.next()) {
-				//Camion(String patente, String modelo, int kmrec, int costokm, int costoh, String fechacompra)
-				OrdenPedido aux = new OrdenPedido();
-				
-				
-			
-				
-				aux.setNropedido(rs.getInt(1));
-				aux.setPlantaorigen(rs.getString(2));
-				aux.setPlantadestino(rs.getString(3));
-				aux.setFechaentrega(rs.getString(5));
-				aux.setEstado(rs.getString(6));
-
-
-
-				
-				
-				lista.add(aux);
-			}
-			//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-			
-			
-			
-			
-				stn.close();
-			
-			
-				connection.close();
-			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		ABMOrdenPedido.consultarordenescreadas(lista);
+		
+		
+		
 		int tamano = lista.size();
 		String [][]aux = new String [tamano][5];
 		int i = 0; int j = 0;
@@ -151,14 +104,9 @@ public class VerOrdenesCreadas extends JFrame {
 
 
 		JTable tablaresu = new JTable(aux, titulos);
-		//this.remove(tabla);
 		tabla = new JTable(aux, titulos);
 		
-		//principal.add(tablaresu);
-		//principal.add(tabla);
 		
-		//este anda bien
-		//principal.remove(tabla);
 		principal.add(new JScrollPane(tabla),BorderLayout.CENTER);
 		
 		

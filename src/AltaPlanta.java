@@ -57,7 +57,6 @@ public class AltaPlanta extends JFrame {
 		
 		guardar.addActionListener(e -> {
 			try {
-				//dao.AMBCamion.altacamion("abc123", "scania", 12, 1, 6, "2020/12/12");
 				dao.AMBPlanta.altaplanta(camponombre.getText());
 				this.consultar();
 				JOptionPane.showMessageDialog(null, "Se guardó el registro con éxito", "Información",1);
@@ -67,12 +66,10 @@ public class AltaPlanta extends JFrame {
 				e1.printStackTrace();
 			}
 			
-			//dao.AMBCamion.altacamion(patente.getText(), modelo.getText(), Integer.parseInt(kmrec.getText()), Integer.parseInt(costokm.getText()), Integer.parseInt(costohora.getText()), fechacompra.getText());
 		});
 		
 		borrar.addActionListener(a -> {
 			if (tabla.getSelectedRow() != -1) {
-				//System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				try {
 					dao.AMBPlanta.borrarplanta(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 				} catch (SQLException e1) {

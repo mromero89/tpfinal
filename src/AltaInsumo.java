@@ -114,50 +114,10 @@ public class AltaInsumo extends JFrame {
 
 		);
 		
-		/*
-		consulta.addActionListener(e->{
-			ArrayList<Planta> lista = new ArrayList<Planta>();
-			try {
-				lista = dao.AMBPlanta.todos();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			int tamano = lista.size();
-			String [][] aux = new String [tamano][1];
-			int i = 0; int j = 0;
-			for (Planta c : lista) {
-				aux[i][0]=c.getNombre();
-				
-				i++;
-				
-				//areatext.append(i.getPatente()+"\n");
-			}
-			
-			String titulos[] = {"Nombre"};
-			
-			
-			JTable tablaresu = new JTable(aux, titulos);
-			principal.add(tablaresu);
-			principal.revalidate();
-			
-		});
-		*/
-		
-		/*
-		limpiar.addActionListener(a -> {
-			campopatente.setText("");
-			campomodelo.setText("");
-			campokm.setText("");
-			campocostokm.setText("");
-			campocostoh.setText("");
-			campofechacompra.setText("");
-			
-		});*/
 		
 		
-		/*public static void altaruta(String origen, String destino, String distanciakm, String duracionh, String pesomax, String nombre) throws SQLException  {
-	*/
+		
+		
 		guardar.addActionListener(e -> {
 		if (tipoinsumo.getSelectedIndex() == 1) {
 				System.out.println("insumo general");
@@ -184,53 +144,16 @@ public class AltaInsumo extends JFrame {
 
 				}
 			}
-		/*
-			try {
-				dao.ABMRuta.altaruta(inicio.getSelectedItem().toString(), destino.getSelectedItem().toString(), campodistancia.getText(), campoduracion.getText(), campopeso.getText(), camponombre.getText());
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			/*
-			try {
-				//dao.AMBCamion.altacamion("abc123", "scania", 12, 1, 6, "2020/12/12");
-				dao.AMBPlanta.altaplanta(camponombre.getText());
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}*/
+		
 			
-			//dao.AMBCamion.altacamion(patente.getText(), modelo.getText(), Integer.parseInt(kmrec.getText()), Integer.parseInt(costokm.getText()), Integer.parseInt(costohora.getText()), fechacompra.getText());
 		);
-		/*Gestion de base de datos
-		try { 
-		    Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-		}
 		
-	
-		Connection connection = null;
-		// Database connect
-		// Conectamos con la base de datos
-		connection = DriverManager.getConnection(
-		        "jdbc:postgresql://localhost:5432/postgres",
-		        "postgres", "wilson222");
-		Statement stn = connection.createStatement();
-		stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-		
-		stn.close();
-		connection.close();
-	
-	FIn de gestion de base de datos
-	*/
 		principal.add(tipoinsumo);
 		
 		principal.add(descripcion);
 		principal.add(campodescripcion);
 		principal.add(umedida);
 		principal.add(campoumedida);
-		//principal.add(duracion);
 		principal.add(costo);
 		principal.add(campocosto);
 		

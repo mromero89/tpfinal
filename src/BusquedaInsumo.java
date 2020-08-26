@@ -48,7 +48,6 @@ public class BusquedaInsumo extends JFrame {
 	JPanel principal = new JPanel();
 	
 	JTable tabla  = new JTable(2,3);
-	//String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
 
 
 	
@@ -60,11 +59,7 @@ public class BusquedaInsumo extends JFrame {
 		BorderLayout bl = new BorderLayout();
 		this.setLayout(bl);
 		
-		//this.setContentPane(principal);
 	
-		
-		
-		
 		
 		
 		consulta.addActionListener(e->{
@@ -86,7 +81,6 @@ public class BusquedaInsumo extends JFrame {
 			campodensidad.setText("");
 			campotipo.setText("");
 			
-			//ejemplo de obtencion de datos de una tabla
 			
 			
 			
@@ -95,8 +89,7 @@ public class BusquedaInsumo extends JFrame {
 		modificar.addActionListener(e-> {
 			//ejemplo de obtencion de datos de una tabla
 			if (tabla.getSelectedRow() != -1) {
-				//System.out.println(tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
-				//hay q cambiar esto por modificacioninsumosm
+				
 				ModificacionInsumoSM smenu = new ModificacionInsumoSM(tabla.getValueAt(tabla.getSelectedRow(), 0).toString(), tabla.getValueAt(tabla.getSelectedRow(), 1).toString(), tabla.getValueAt(tabla.getSelectedRow(), 2).toString(), tabla.getValueAt(tabla.getSelectedRow(), 3).toString(), tabla.getValueAt(tabla.getSelectedRow(), 4).toString(), tabla.getValueAt(tabla.getSelectedRow(), 5).toString(), tabla.getValueAt(tabla.getSelectedRow(), 0).toString());
 			}
 			
@@ -133,11 +126,9 @@ public class BusquedaInsumo extends JFrame {
 		principal.add(tipo);
 		principal.add(campotipo);
 		principal.add(limpiar);
-		//principal.add(areatext);
 		principal.add(consulta);
 		principal.add(borrar);
 		this.add(modificar, BorderLayout.SOUTH);
-		//principal.add(tabla);
 		
 		this.add(principal, BorderLayout.NORTH);
 		this.add(a, BorderLayout.CENTER);
@@ -167,7 +158,7 @@ public class BusquedaInsumo extends JFrame {
 			aux[i][4]=String.valueOf(c.getDensidad());
 			aux[i][5]=c.getTipo();
 			
-			/*Consulta SQL*/
+			/*Consulta SQL para sumar cantidad total de Insumo*/
 			try { 
 			    Class.forName("org.postgresql.Driver");
 			} catch (ClassNotFoundException ex) {
@@ -191,7 +182,6 @@ public class BusquedaInsumo extends JFrame {
 				
 
 			}
-			//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
 			
 			
 			
@@ -204,35 +194,24 @@ public class BusquedaInsumo extends JFrame {
 			
 			i++;
 			
-			//SELECT SUM(cantidad) FROM insumosplantas WHERE insumo = 'cal';
 		}
 		
 		
-		//principal.remove(tabla);
-		//principal.revalidate();
-		//pack();
+		
 		String titulos[] = {"Descripcion", "UnidadMedida", "Costo", "Peso", "Densidad", "Tipo", "Stock total del insumo"};
 
 
 		JTable tablaresu = new JTable(aux, titulos);
 		this.remove(a);
 		tabla = new JTable(aux, titulos);
-		
-		//principal.add(tablaresu);
-		//principal.add(tabla);
-		
-		//este anda bien
-		//principal.remove(tabla);
+
+
 		a = new JScrollPane(tabla);
 
 		this.add(a,BorderLayout.CENTER);
 		
 		
-		//principal.add(tabla);
-		//tabla.repaint();
 		
-		//tabla.repaint();
-
 		this.revalidate();
 		this.repaint();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);

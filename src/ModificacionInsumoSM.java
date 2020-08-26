@@ -48,7 +48,6 @@ public class ModificacionInsumoSM extends JFrame{
 			String ccostohora, String cfecha, String clave){
 		super("Modificar datos de Insumo");
 		this.setVisible(true);
-		//this.setLayout();
 		this.campodescripcion.setText(cpatente);
 		this.campoumedida.setText(cmodelo);
 		this.campocosto.setText(ckmrec);
@@ -59,7 +58,6 @@ public class ModificacionInsumoSM extends JFrame{
 		
 		
 		
-		//tabla.addColumn("Nombre");
 		
 		
 		
@@ -120,57 +118,4 @@ public class ModificacionInsumoSM extends JFrame{
 	}
 	
 
-	/*private void consultar() {
-		ArrayList<Camion> lista = new ArrayList<Camion>();
-		try {
-			lista = dao.AMBCamion.busqueda(campopatente.getText(), campomodelo.getText(), campokm.getText(), campocostokm.getText(), campocostoh.getText(), campofechacompra.getText());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		int tamano = lista.size();
-		String [][]aux = new String [tamano][6];
-		int i = 0; int j = 0;
-		for (Camion c : lista) {
-			aux[i][0]=c.getPatente();
-			aux[i][1]=c.getModelo();
-			aux[i][2]=String.valueOf(c.getKmrec());
-			aux[i][3]=String.valueOf(c.getCostokm());
-			aux[i][4]=String.valueOf(c.getCostoh());
-			aux[i][5]=c.getFechacompra();
-			i++;
-			
-			//areatext.append(i.getPatente()+"\n");
-		}
-		
-		
-		//principal.remove(tabla);
-		//principal.revalidate();
-		//pack();
-		String titulos[] = {"Patente", "Modelo", "KM Recorridos", "Costo KM", "Costo Hora", "Fecha de compra"};
-
-
-		JTable tablaresu = new JTable(aux, titulos);
-		this.remove(tabla);
-		tabla = new JTable(aux, titulos);
-		
-		//principal.add(tablaresu);
-		//principal.add(tabla);
-		
-		//este anda bien
-		principal.remove(tabla);
-		principal.add(new JScrollPane(tabla),BorderLayout.CENTER);
-		
-		
-		//principal.add(tabla);
-		//tabla.repaint();
-		
-		//tabla.repaint();
-
-		principal.revalidate();
-		principal.repaint();
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-
-}*/
 }

@@ -24,7 +24,9 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import dao.ABMOrdenPedido;
 import dao.ABMRuta;
+import dao.ABMStockPlanta;
 import dao.AMBCamion;
 import dao.AMBPlanta;
 import dominio.Camion;
@@ -87,7 +89,6 @@ public class DetalleItems extends JFrame {
 
 
   
-       // System.out.println("Priority queue values are: " + queue); 
       
 		return queue.poll();
 	}
@@ -105,8 +106,9 @@ public class DetalleItems extends JFrame {
 		this.nropedido = nropedido;
 		this.plantadestino = plantadestino;
 		
+		//Se asigna el camion
 		camionasig = asignarCamion();
-		System.out.println("EL CAMION ASIGNADO ES: "+camionasig.getPatente());
+		//System.out.println("EL CAMION ASIGNADO ES: "+camionasig.getPatente());
 
 		//EJEMPLO DE CARGA DE GRAFO DE DISTANCIA
 		ArrayList<Planta> listaplantas = AMBPlanta.todos();
@@ -125,21 +127,7 @@ public class DetalleItems extends JFrame {
 	
 	//FIN DE CARGA DE GRAFO
 	
-	
-	
-	Grafo<String> graf2 = new Grafo<String>();
-	graf2.addNodo("A");
-	graf2.addNodo("B");
-	graf2.addNodo("C");
-	graf2.conectar("A", "B");
-	graf2.conectar("A", "C");
-	graf2.conectar("B", "C");
-	graf2.conectar("C", "A");
-
-
-	
-	
-	
+		
 	
 	
 	
@@ -162,7 +150,6 @@ public class DetalleItems extends JFrame {
 		this.setVisible(true);
 		
 
-		//this.setContentPane(principal);
 	
 		
 		this.consultar();
@@ -175,36 +162,13 @@ public class DetalleItems extends JFrame {
 			for (ItemPedido j : lista) {
 				//String cont = "insumo = \'"+j.getInsumo()+"\' AND cantidad >= "+j.getCantidad();
 				//Ver si planta.cantItem >= canItemPedido
-				//consulta SQL 
 				
-				 try { 
-		    Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-		    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-		}
-		
+				
+				ABMStockPlanta.consultaplantastock(rsconsulta, j, i);
 
-		Connection connection = null;
-		// Database connect
-		// Conectamos con la base de datos
-		connection = DriverManager.getConnection(
-		        "jdbc:postgresql://localhost:5432/postgres",
-		        "postgres", "wilson222");
-		String consulta = "SELECT * FROM insumosplantas WHERE insumo = \'"+j.getInsumo()+"\' AND cantidad >="+j.getCantidad()+" AND nombreplanta = \'"+i.getNombre()+"\'";
-		//System.out.println(consulta);
-		PreparedStatement stn = connection.prepareStatement(consulta);
-		ResultSet rs = stn.executeQuery();
-		while(rs.next()) { 
-				 Planta aux = new Planta();
-				 aux.setNombre(rs.getString("nombreplanta"));
-				 rsconsulta.add(aux);
-				/*FIn consulta SQL */
-			}
-		stn.close();
-		
-		
-		connection.close();
-		}
+				 
+				 
+				 }
 		}
 		
 		
@@ -221,42 +185,11 @@ public class DetalleItems extends JFrame {
 		}
 		
 		if (plantascontodosinsumos.size() == 0) {
-			System.out.println("No hay plantas que tengan todos los insumos del pedido!");
+			//System.out.println("No hay plantas que tengan todos los insumos del pedido!");
 			 JOptionPane.showMessageDialog(null, "No existen plantas con insumos para cubrir esta orden. La orden se marcará como CANCELADA.", "Error",0);
-			 //hacer consulta SQL para marcar orden de pedido como CANCELADA
 			 
-			
-					
-					try { 
-					    Class.forName("org.postgresql.Driver");
-					} catch (ClassNotFoundException ex) {
-					    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-					}
-					
-
-					Connection connection = null;
-					// Database connect
-					// Conectamos con la base de datos
-					connection = DriverManager.getConnection(
-					        "jdbc:postgresql://localhost:5432/postgres",
-					        "postgres", "wilson222");
-					Statement stn = connection.createStatement();
-					//stn.execute("INSERT INTO \"Libro\" (id, nombre) VALUES (4, \'Oscar\')");
-					
-					//System.out.println("palabra sql: UPDATE camiones SET patente = \'"+patente+"\', modelo = \'"+modelo+"\', kmrec ="+kmrec+", costokm ="+costokm+", costohora="+costohora+", fechacompra= \'"+fecha+"\' WHERE patente = \'"+clave+"\'");
-					
-						stn.executeUpdate("UPDATE ordenespedidos SET estado = \'CANCELADA\' WHERE nropedido = "+this.nropedido);
-						
-					
-					
-						stn.close();
-					
-					
-						connection.close();
-					
-					
-					
-				
+			 ABMOrdenPedido.marcarcancelada(this.nropedido);
+			 this.dispose();
 			 
 			 
 		}
@@ -286,8 +219,7 @@ public class DetalleItems extends JFrame {
 
 			this.add(sur, BorderLayout.SOUTH);
 
-			//campoplantasci = new JTextField(plantascontodos);
-			//principal.add(campoplantasci);
+			
 			principal.revalidate();
 			this.add(principal, BorderLayout.CENTER);
 			
@@ -308,12 +240,10 @@ public class DetalleItems extends JFrame {
 						  }
 							  
 					  }
-					  //System.out.println("Clave: " + key + " -> Valor: " + lista.get(key));
 					}
 			}
 		
-			//System.out.println("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
-			//System.out.println("Imprimiendo caminos de la planta origen elegida al destino: ");
+			
 			info.setText("La planta elegida con el camino mas corto para ir a "+this.plantadestino+" es: "+plantaelegida+" Con el valor: "+minimo);
 			
 			
@@ -331,38 +261,37 @@ public class DetalleItems extends JFrame {
 				int contador = 1;
 				Vertice<String> auxiliar1 = null, auxiliar2 = null;
 				for (Vertice<String> t : q) {
-					System.out.println("trabajando con elemento: "+t.getValor());
+					//System.out.println("trabajando con elemento: "+t.getValor());
 					if (contador % 2 != 0) {
 						auxiliar1 = t;
 						if (contador != 1) {
 							suma += (Integer) graf.buscarArista(auxiliar2, auxiliar1).getValor();
 						}
 						contador++;
-						System.out.println("Valor de auxiliar1: "+t.getValor());
+						//System.out.println("Valor de auxiliar1: "+t.getValor());
 					}
 					else {
 						auxiliar2 = t;
-						System.out.println("Valor de auxiliar2: "+t.getValor());
+						//System.out.println("Valor de auxiliar2: "+t.getValor());
 						suma += (Integer) graf.buscarArista(auxiliar1, auxiliar2).getValor();
-						System.out.println("Suma:"+suma);
+						//System.out.println("Suma:"+suma);
 						contador++;
 					}
-					//System.out.println("Elemento: "+t);
-					// aca tendria que haber una consulta de cuanto mide el tramo
+					
 				
 				}
 				int suma2 = suma;
-				System.out.println("Suma2: "+suma2);
+				//System.out.println("Suma2: "+suma2);
 				if (suma2 == minimo) {
-					System.out.println("El mejor camino es:"+q);
+					//System.out.println("El mejor camino es:"+q);
 					rutaselegidas.add(q.toString());
 					
 				}
 			}
-			System.out.println("para agregar a la interfaz grafica");
-			for (String i : rutaselegidas) {
+			//System.out.println("para agregar a la interfaz grafica");
+			/*for (String i : rutaselegidas) {
 				System.out.println(i);
-			}
+			}*/
 			
 			int tamanotabla = rutaselegidas.size();
 			
@@ -378,11 +307,7 @@ public class DetalleItems extends JFrame {
 			
 			tablarutas = new JTable(auxtabla, titulos);
 			
-			/*
-
-			JFrame rutas = new JFrame("Rutas ");
-			rutas.add(tablarutas);
-			rutas.setVisible(true);*/
+			
 			
 
 		}
@@ -421,9 +346,9 @@ public class DetalleItems extends JFrame {
 			
 			//ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			//Integer.valueOf(this.tablarutas.getValueAt(tabla.getSelectedRow(), 0).toString())
-			System.out.println("Valor elegido como planta elegida de la tabla: ");
+			//System.out.println("Valor elegido como planta elegida de la tabla: ");
 			//System.out.println(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
-			System.out.println("Seleccionado: "+this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+			//System.out.println("Seleccionado: "+this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
 
 			
 			List<List<Vertice<String>>> a = graf.caminos(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString(), this.plantadestino);
@@ -434,20 +359,20 @@ public class DetalleItems extends JFrame {
 				int contador = 1;
 				Vertice<String> auxiliar1 = null, auxiliar2 = null;
 				for (Vertice<String> t : q) {
-					System.out.println("trabajando con elemento: "+t.getValor());
+					//System.out.println("trabajando con elemento: "+t.getValor());
 					if (contador % 2 != 0) {
 						auxiliar1 = t;
 						if (contador != 1) {
 							suma += (Integer) graf.buscarArista(auxiliar2, auxiliar1).getValor();
 						}
 						contador++;
-						System.out.println("Valor de auxiliar1: "+t.getValor());
+						//System.out.println("Valor de auxiliar1: "+t.getValor());
 					}
 					else {
 						auxiliar2 = t;
-						System.out.println("Valor de auxiliar2: "+t.getValor());
+						//System.out.println("Valor de auxiliar2: "+t.getValor());
 						suma += (Integer) graf.buscarArista(auxiliar1, auxiliar2).getValor();
-						System.out.println("Suma:"+suma);
+						//System.out.println("Suma:"+suma);
 						contador++;
 					}
 					//System.out.println("Elemento: "+t);
@@ -455,22 +380,22 @@ public class DetalleItems extends JFrame {
 				
 				}
 				int suma2 = suma;
-				System.out.println("Suma2: "+suma2);
+				//System.out.println("Suma2: "+suma2);
 				/*
 				System.out.println("El camino es: "+q);
 				rutaselegidas.add(q.toString());
 */
 				
 				if (suma2 == minimo) {
-					System.out.println("El mejor camino es:"+q);
+					//System.out.println("El mejor camino es:"+q);
 					rutaselegidas.add(q.toString());
 					
 				}
 			}
-			System.out.println("para agregar a la interfaz grafica");
-			for (String i : rutaselegidas) {
+			//System.out.println("para agregar a la interfaz grafica");
+			/*for (String i : rutaselegidas) {
 				System.out.println(i);
-			}
+			}*/
 			
 			int tamanotabla = rutaselegidas.size();
 			
@@ -487,23 +412,7 @@ public class DetalleItems extends JFrame {
 			JTable tablarutas = new JTable(auxtabla, titulos);
 			
 			SeleccionarRuta s = new SeleccionarRuta(tablarutas, "Rutas mas cortas en DISTANCIA", camionasig, this.nropedido);
-/*
-			JFrame rutas = new JFrame("Ruta mas corta en KM");
-			JButton seleccionar = new JButton("Seleccionar ruta");
-			JPanel panel = new JPanel();
-			
-			rutas.setContentPane(panel);
-			panel.add(tablarutas);
-			panel.add(seleccionar);
-			
-			seleccionar.addActionListener(f->{
-				//new SeleccionarRuta(tablarutas);
-				
-			});
-			
-			rutas.setVisible(true);
-			
-			*/
+
 			
 		});
 		
@@ -532,9 +441,9 @@ public class DetalleItems extends JFrame {
 			
 			//ELIGE EL/LOS CAMINOS MAS CORTOS PARA IR DE LA PLANTA ORIGEN A LA PLANTA DESTINO
 			//Integer.valueOf(this.tablarutas.getValueAt(tabla.getSelectedRow(), 0).toString())
-			System.out.println("Valor elegido como planta elegida de la tabla: ");
+			//System.out.println("Valor elegido como planta elegida de la tabla: ");
 			//System.out.println(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
-			System.out.println("Seleccionado: "+this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
+			//System.out.println("Seleccionado: "+this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString());
 
 			
 			List<List<Vertice<String>>> a = grafd.caminos(this.tabla2.getValueAt(tabla2.getSelectedRow(), 0).toString(), this.plantadestino);
@@ -545,20 +454,20 @@ public class DetalleItems extends JFrame {
 				int contador = 1;
 				Vertice<String> auxiliar1 = null, auxiliar2 = null;
 				for (Vertice<String> t : q) {
-					System.out.println("trabajando con elemento: "+t.getValor());
+					//System.out.println("trabajando con elemento: "+t.getValor());
 					if (contador % 2 != 0) {
 						auxiliar1 = t;
 						if (contador != 1) {
 							suma += (Integer) grafd.buscarArista(auxiliar2, auxiliar1).getValor();
 						}
 						contador++;
-						System.out.println("Valor de auxiliar1: "+t.getValor());
+						//System.out.println("Valor de auxiliar1: "+t.getValor());
 					}
 					else {
 						auxiliar2 = t;
-						System.out.println("Valor de auxiliar2: "+t.getValor());
+						//System.out.println("Valor de auxiliar2: "+t.getValor());
 						suma += (Integer) grafd.buscarArista(auxiliar1, auxiliar2).getValor();
-						System.out.println("Suma:"+suma);
+						//System.out.println("Suma:"+suma);
 						contador++;
 					}
 					//System.out.println("Elemento: "+t);
@@ -566,22 +475,22 @@ public class DetalleItems extends JFrame {
 				
 				}
 				int suma2 = suma;
-				System.out.println("Suma2: "+suma2);
+				//System.out.println("Suma2: "+suma2);
 				/*
 				System.out.println("El camino es: "+q);
 				rutaselegidas.add(q.toString());
 */
 				
 				if (suma2 == minimo) {
-					System.out.println("El mejor camino es:"+q);
+					//System.out.println("El mejor camino es:"+q);
 					rutaselegidas.add(q.toString());
 					
 				}
 			}
-			System.out.println("para agregar a la interfaz grafica");
-			for (String i : rutaselegidas) {
+			//System.out.println("para agregar a la interfaz grafica");
+			/*for (String i : rutaselegidas) {
 				System.out.println(i);
-			}
+			}*/
 			
 			int tamanotabla = rutaselegidas.size();
 			
@@ -599,35 +508,14 @@ public class DetalleItems extends JFrame {
 
 			SeleccionarRuta s = new SeleccionarRuta(tablarutas, "Rutas mas cortas en DURACIÓN", camionasig, this.nropedido);
 
-			/*
-			JFrame rutas = new JFrame("Ruta mas corta en duracion");
-			//JPanel panelruta = new JPanel();
-			//rutas.setContentPane(panelruta);
-			JButton seleccionar = new JButton("Seleccionar ruta");
-			//Boton que tiene que: insertar la orden y actualizar datos del camion
 
-		
-			
-			JPanel panel = new JPanel();
-			
-			rutas.setContentPane(panel);
-			panel.add(tablarutas);
-			panel.add(seleccionar);
-			rutas.setVisible(true);
-
-			*/
 			
 		});
 		
 		
 	
 		
-		//principal.add(destino);
 		
-		//principal.add(fechamaxima);
-		//principal.add(campofechamaxima);
-		//principal.add(numeropedido);
-		//principal.add(camponumeropedido);
 		sur.add(agregar);
 		sur.add(rutamasrapida);
 		sur.add(info);
@@ -642,55 +530,9 @@ public class DetalleItems extends JFrame {
 	//Crea la tabla con los elementos del pedido
 	private void consultar() {
 		
-		//CONSULTA SQL
-		try {
-			
-			
-			try { 
-			    Class.forName("org.postgresql.Driver");
-			} catch (ClassNotFoundException ex) {
-			    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
-			}
-			
-			Connection connection = null;
-			// Database connect
-			// Conectamos con la base de datos
-			connection = DriverManager.getConnection(
-			        "jdbc:postgresql://localhost:5432/postgres",
-			        "postgres", "wilson222");
-			String consulta = "SELECT * FROM itemspedidos WHERE nropedido = "+nropedido;
-			PreparedStatement stn = connection.prepareStatement(consulta);
-			ResultSet rs = stn.executeQuery();
-			while(rs.next()) {
-				//Camion(String patente, String modelo, int kmrec, int costokm, int costoh, String fechacompra)
-				ItemPedido aux = new ItemPedido();
-				/*private String descripcion;
-				private String unidadmedida;
-				private int costo;
-				private String tipo;
-				private int peso;
-				private int densidad;*/
-				aux.setInsumo(rs.getString(1));
-				aux.setCantidad(rs.getInt(2));
-				aux.setCosto(rs.getInt(3));
+		//	public static void consultaritems(int nropedido, ArrayList<ItemPedido> lista) {
 
-
-
-				
-				
-				lista.add(aux);
-			}
-			
-			
-				stn.close();
-			
-			
-				connection.close();
-			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		ABMOrdenPedido.consultaritems(nropedido, lista);
 		
 		
 		
@@ -704,32 +546,18 @@ public class DetalleItems extends JFrame {
 			
 			i++;
 			
-			//areatext.append(i.getPatente()+"\n");
 		}
 		
 		
-		//principal.remove(tabla);
-		//principal.revalidate();
-		//pack();
+		
 		String titulos[] = {"Insumo", "Cantidad", "Costo"};
 
 
 		JTable tablaresu = new JTable(aux, titulos);
-		//this.remove(tabla);
 		tabla = new JTable(aux, titulos);
 		
-		//principal.add(tablaresu);
-		//principal.add(tabla);
-		
-		//este anda bien
-		//principal.remove(tabla);
 		principal.add(new JScrollPane(tabla),BorderLayout.CENTER);
 		
-		
-		//principal.add(tabla);
-		//tabla.repaint();
-		
-		//tabla.repaint();
 
 		principal.revalidate();
 		principal.repaint();

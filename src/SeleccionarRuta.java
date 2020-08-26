@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,15 +27,14 @@ public class SeleccionarRuta extends JFrame{
 		BorderLayout bl = new BorderLayout();
 		this.setLayout(bl);
 		
-		//JPanel panel = new JPanel();
-		//this.setContentPane(panel);
+		
 		JTable tablarutas = tabla;
 		JButton seleccionar = new JButton("Seleccionar ruta");
 		this.add(tablarutas, BorderLayout.CENTER);
 		this.add(seleccionar, BorderLayout.SOUTH);
 		pack();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		System.out.println("Camion asignado es:" + camion.getPatente());
+		//System.out.println("Camion asignado es:" + camion.getPatente());
 		
 		
 
@@ -61,30 +61,16 @@ public class SeleccionarRuta extends JFrame{
 							
 			}
 			
-			System.out.println("TODAS LAS PLANTAS DE LA RUTA SON:");
-			
-			for(int i=0; i<resul.length; i++) {
-				
-				
-			
-			System.out.println(listaSalida[i]);
-			
-		}
+
 			
 			//planta de inicio de la ruta seleccionada
 			String plantainicio = resul[0].substring(1);
 			String plantafin = resul[resul.length-1].substring(1, resul[resul.length-1].length()-1);
-			//String[] inicio = resul[0].split("[");
 			
-			//System.out.println("inicio: "+inicio[1]);
-			
-			
-			System.out.println("Planta inicio: "+plantainicio);
-			System.out.println("Planta fin: "+plantafin);
 			
 			try {
 				costo = costo(camion, listaSalida);
-				System.out.println("El costo total es de "+costo);
+				//System.out.println("El costo total es de "+costo);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -101,8 +87,7 @@ public class SeleccionarRuta extends JFrame{
 			}
 			
 			
-			/*public static void modificarcamion(String patente, String modelo, String kmrec, String costokm, 
-			String costohora, String fecha, String clave)*/
+			
 				
 			try {
 				AMBCamion.modificarcamion(camion.getPatente(), camion.getModelo(), km, String.valueOf(camion.getCostokm()), String.valueOf(camion.getCostoh()), camion.getFechacompra(), camion.getPatente());
@@ -126,7 +111,9 @@ public class SeleccionarRuta extends JFrame{
 				e.printStackTrace();
 			}
 
-			
+			JOptionPane.showMessageDialog(null, "Se guardó la orden como PROCESADA. Camión Seleccionado: "+camion.getPatente()+". Costo del Envio: "+costo, "Información",1);
+			this.dispose();
+
 		});
 		
 		
