@@ -95,7 +95,7 @@ public class DetalleItems extends JFrame {
 	
 	
 	//CONSTRUCTOR
-	DetalleItems(int nropedido, String plantadestino) throws SQLException{
+	public DetalleItems(int nropedido, String plantadestino) throws SQLException{
 		
 		
 		super("Detalle items de la orden "+nropedido);

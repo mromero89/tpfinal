@@ -194,6 +194,57 @@ public class ABMOrdenPedido {
 		
 	}
 	
+	public static void consultarorden(ArrayList<OrdenPedido> lista, String estado) {
+		try {
+			
+			try { 
+			    Class.forName("org.postgresql.Driver");
+			} catch (ClassNotFoundException ex) {
+			    System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+			}
+			
+			Connection connection = null;
+
+			connection = DriverManager.getConnection(
+			        "jdbc:postgresql://localhost:5432/postgres",
+			        "postgres", "wilson222");
+			PreparedStatement stn = connection.prepareStatement("SELECT * FROM ordenespedidos WHERE estado = \'"+estado+"\'");
+			ResultSet rs = stn.executeQuery();
+			while(rs.next()) {
+				OrdenPedido aux = new OrdenPedido();
+				
+				
+			
+				
+				aux.setNropedido(rs.getInt(1));
+				aux.setPlantaorigen(rs.getString(2));
+				aux.setPlantadestino(rs.getString(3));
+				aux.setFechaentrega(rs.getString(5));
+				aux.setEstado(rs.getString(6));
+
+
+
+				
+				
+				lista.add(aux);
+			}
+			
+			
+			
+			
+				stn.close();
+			
+			
+				connection.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	
 	public static void guardarordenpedido(String camponumeropedido, String destino, String campofechamaxima, ArrayList<ItemPedido> items) {
 		
 		try { 
